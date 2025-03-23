@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Autogest ERP</title>
+</head>
+<body>
+    <h2>Bienvenido, {{ user.username }}!</h2>
+    <p>Este es el sistema ERP de Autogest.</p>
+    <p><a href="{% url 'ventas:cliente_list' %}">Ver Clientes</a></p>
+    <p><a href="{% url 'inventario:vehiculo_list' %}">Ver Vehículos</a></p>
+    <p><a href="{% url 'empleados:empleado_list' %}">Ver Empleados</a></p>
+    <p><a href="{% url 'pedidos:pedido_list' %}">Ver Pedidos</a></p>
+    <p><a href="{% url 'finanzas:finanza_list' %}">Ver Finanzas</a></p>
+    <p><a href="{% url 'reportes:reporte_ventas' %}">Ver Reporte de Ventas</a></p>
+    <p><a href="{% url 'logout' %}">Cerrar Sesión</a></p>
+</body>
+</html>

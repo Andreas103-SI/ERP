@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pedidos - Autogest ERP</title>
+</head>
+<body>
+    <h2>Lista de Pedidos</h2>
+    <ul>
+        {% for pedido in pedidos %}
+            <li>Pedido #{{ pedido.id }} - Cliente: {{ pedido.cliente.nombre }} - Fecha: {{ pedido.fecha }}</li>
+        {% empty %}
+            <li>No hay pedidos registrados.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'home' %}">Volver al Inicio</a></p>
+    <p><a href="{% url 'logout' %}">Cerrar Sesión</a></p>
+</body>
+</html>

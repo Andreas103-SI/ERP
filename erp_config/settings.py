@@ -137,6 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -163,3 +164,4 @@ REST_FRAMEWORK = {
 LOGIN_URL = '/accounts/login/'  # URL de inicio de sesión
 LOGIN_REDIRECT_URL = '/'  # Redirige a la página principal después de iniciar sesión
 LOGOUT_REDIRECT_URL = '/'  # Redirige a la página principal después de cerrar sesión
+

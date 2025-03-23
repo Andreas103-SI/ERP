@@ -18,15 +18,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ventas/', include('ventas.urls')),  # Vistas basadas en plantillas y APIs
+    path('ventas/', include('ventas.urls')),
     path('inventario/', include('inventario.urls')),
     path('empleados/', include('empleados.urls')),
     path('pedidos/', include('pedidos.urls')),
     path('finanzas/', include('finanzas.urls')),
     path('reportes/', include('reportes.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('core.urls')),  # Página principal
+    path('', include('core.urls')),
 ]

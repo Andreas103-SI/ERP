@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Ventas por Mes - Autogest ERP</title>
+</head>
+<body>
+    <h2>Reporte de Ventas por Mes</h2>
+    <ul>
+        {% for venta in ventas %}
+            <li>Mes: {{ venta.mes|date:"Y-m" }} - Total: {{ venta.total }}</li>
+        {% empty %}
+            <li>No hay datos de ventas.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'home' %}">Volver al Inicio</a></p>
+    <p><a href="{% url 'logout' %}">Cerrar Sesión</a></p>
+</body>
+</html>

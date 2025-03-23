@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import VentasPorMesView, InventarioDisponibleView, GastosPorNominaView
+from .views import VentasPorMesView, reporte_ventas
+
+app_name = 'reportes'  # Define el namespace para las URLs
 
 urlpatterns = [
-    path('ventas-por-mes/', VentasPorMesView.as_view(), name='ventas-por-mes'),
-    path('inventario-disponible/', InventarioDisponibleView.as_view(), name='inventario-disponible'),
-    path('gastos-por-nomina/', GastosPorNominaView.as_view(), name='gastos-por-nomina'),
+    path('api/ventas-por-mes/', VentasPorMesView.as_view(), name='ventas-por-mes'),
+    path('ventas-por-mes/', reporte_ventas, name='reporte_ventas'),  # Vista basada en plantillas
 ]
