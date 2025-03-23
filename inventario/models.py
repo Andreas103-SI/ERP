@@ -14,7 +14,7 @@ class Vehiculo(models.Model):
     id_vehiculo = models.AutoField(primary_key=True)
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=50)
-    año = models.IntegerField()
+    anio = models.IntegerField()
     numero_bastidor = models.CharField(max_length=50, unique=True)
     caracteristicas = models.TextField()
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES)
