@@ -1,0 +1,16 @@
+<!-- empleados/templates/empleados/empleado_confirm_delete.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Empleado</title>
+</head>
+<body>
+    <h1>Eliminar Empleado</h1>
+    <p>¿Estás seguro de que quieres eliminar al empleado {{ empleado.nombre }} {{ empleado.apellido }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+    </form>
+    <a href="{% url 'empleados:empleado_list' %}">Cancelar</a>
+</body>
+</html>

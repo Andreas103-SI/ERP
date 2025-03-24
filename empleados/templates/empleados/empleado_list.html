@@ -1,0 +1,48 @@
+<!-- empleados/templates/empleados/empleado_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Empleados</title>
+</head>
+<body>
+    <h1>Lista de Empleados</h1>
+    <a href="{% url 'empleados:empleado_create' %}">Crear Nuevo Empleado</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Puesto</th>
+                <th>Salario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for empleado in empleados %}
+            <tr>
+                <td>{{ empleado.id_empleado }}</td>
+                <td>{{ empleado.nombre }}</td>
+                <td>{{ empleado.apellido }}</td>
+                <td>{{ empleado.dni }}</td>
+                <td>{{ empleado.telefono }}</td>
+                <td>{{ empleado.email }}</td>
+                <td>{{ empleado.puesto }}</td>
+                <td>{{ empleado.salario }}</td>
+                <td>
+                    <a href="{% url 'empleados:empleado_update' empleado.pk %}">Editar</a>
+                    <a href="{% url 'empleados:empleado_delete' empleado.pk %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">No hay empleados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
