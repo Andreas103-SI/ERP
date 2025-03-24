@@ -1,0 +1,48 @@
+<!-- inventario/templates/inventario/vehiculo_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Vehículos</title>
+</head>
+<body>
+    <h1>Lista de Vehículos</h1>
+    <a href="{% url 'inventario:vehiculo_create' %}">Crear Nuevo Vehículo</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Año</th>
+                <th>Número de Bastidor</th>
+                <th>Estado</th>
+                <th>Precio</th>
+                <th>Disponibilidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vehiculo in vehiculos %}
+            <tr>
+                <td>{{ vehiculo.id_vehiculo }}</td>
+                <td>{{ vehiculo.marca }}</td>
+                <td>{{ vehiculo.modelo }}</td>
+                <td>{{ vehiculo.anio }}</td>
+                <td>{{ vehiculo.numero_bastidor }}</td>
+                <td>{{ vehiculo.estado }}</td>
+                <td>{{ vehiculo.precio }}</td>
+                <td>{{ vehiculo.disponibilidad }}</td>
+                <td>
+                    <a href="{% url 'inventario:vehiculo_update' vehiculo.pk %}">Editar</a>
+                    <a href="{% url 'inventario:vehiculo_delete' vehiculo.pk %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">No hay vehículos.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
