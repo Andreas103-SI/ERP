@@ -1,0 +1,16 @@
+<!-- pedidos/templates/pedidos/pedido_confirm_delete.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Pedido</title>
+</head>
+<body>
+    <h1>Eliminar Pedido</h1>
+    <p>¿Estás seguro de que quieres eliminar el pedido {{ pedido.id_pedido }} de {{ pedido.proveedor }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+    </form>
+    <a href="{% url 'pedidos:pedido_list' %}">Cancelar</a>
+</body>
+</html>

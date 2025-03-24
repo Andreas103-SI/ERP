@@ -5,5 +5,4 @@ from .models import Pedido
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['cliente', 'vehiculo', 'proveedor', 'empleado', 'fecha', 'estado', 'total']
-        
+        fields = ['proveedor', 'producto', 'cantidad', 'valor', 'estado', 'iva', 'total']

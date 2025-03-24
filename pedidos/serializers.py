@@ -1,12 +1,9 @@
 from rest_framework import serializers
-from .models import Proveedor, Pedido
-
-class ProveedorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Proveedor
-        fields = '__all__'
+from .models import Pedido
 
 class PedidoSerializer(serializers.ModelSerializer):
+    proveedor = serializers.StringRelatedField()
+
     class Meta:
         model = Pedido
-        fields = '__all__'
+        fields = ['id_pedido', 'proveedor', 'producto', 'cantidad', 'valor', 'estado', 'iva', 'total']
