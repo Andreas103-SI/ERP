@@ -2,6 +2,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Proveedor
 from .forms import ProveedorForm
+from rest_framework import viewsets
+from .serializers import ProveedorSerializer
 
 def proveedor_list(request):
     proveedores = Proveedor.objects.all()
@@ -34,3 +36,7 @@ def proveedor_delete(request, pk):
         proveedor.delete()
         return redirect('proveedor_list')
     return render(request, 'proveedores/proveedor_confirm_delete.html', {'proveedor': proveedor})
+
+class ProveedorViewSet(viewsets.ModelViewSet):
+    queryset = Proveedor.objects.all()
+    serializer_class = ProveedorSerializer

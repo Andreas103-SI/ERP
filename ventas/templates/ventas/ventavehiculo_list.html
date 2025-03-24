@@ -1,0 +1,36 @@
+<!-- ventas/templates/ventas/ventavehiculo_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Venta-Vehículo</title>
+</head>
+<body>
+    <h1>Lista de Venta-Vehículo</h1>
+    <a href="{% url 'ventas:ventavehiculo_create' %}">Asociar Venta-Vehículo</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Venta</th>
+                <th>Vehículo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ventavehiculo in ventavehiculos %}
+            <tr>
+                <td>{{ ventavehiculo.venta }}</td>
+                <td>{{ ventavehiculo.vehiculo }}</td>
+                <td>
+                    <a href="{% url 'ventas:ventavehiculo_update' ventavehiculo.pk %}">Editar</a>
+                    <a href="{% url 'ventas:ventavehiculo_delete' ventavehiculo.pk %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No hay asociaciones venta-vehículo.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

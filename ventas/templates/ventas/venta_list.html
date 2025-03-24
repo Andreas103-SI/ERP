@@ -1,0 +1,46 @@
+<!-- ventas/templates/ventas/venta_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Ventas</title>
+</head>
+<body>
+    <h1>Lista de Ventas</h1>
+    <a href="{% url 'ventas:venta_create' %}">Crear Nueva Venta</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Presupuesto</th>
+                <th>Fecha</th>
+                <th>Valor Venta</th>
+                <th>IVA</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venta in ventas %}
+            <tr>
+                <td>{{ venta.id_venta }}</td>
+                <td>{{ venta.cliente }}</td>
+                <td>{{ venta.presupuesto }}</td>
+                <td>{{ venta.fecha }}</td>
+                <td>{{ venta.valor_venta }}</td>
+                <td>{{ venta.iva }}</td>
+                <td>{{ venta.total }}</td>
+                <td>
+                    <a href="{% url 'ventas:venta_update' venta.pk %}">Editar</a>
+                    <a href="{% url 'ventas:venta_delete' venta.pk %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">No hay ventas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!-- ventas/templates/ventas/cliente_confirm_delete.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Cliente</title>
+</head>
+<body>
+    <h1>Eliminar Cliente</h1>
+    <p>¿Estás seguro de que quieres eliminar al cliente {{ cliente.nombre }} {{ cliente.apellido }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+    </form>
+    <a href="{% url 'ventas:cliente_list' %}">Cancelar</a>
+</body>
+</html>
