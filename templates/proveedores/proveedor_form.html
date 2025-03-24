@@ -1,0 +1,16 @@
+<!-- proveedores/templates/proveedores/proveedor_form.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Proveedor</title>
+</head>
+<body>
+    <h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Proveedor</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+    <a href="{% url 'proveedor_list' %}">Volver a la lista</a>
+</body>
+</html>

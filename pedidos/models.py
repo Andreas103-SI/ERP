@@ -1,5 +1,5 @@
 from django.db import models
-
+from ventas.models import Cliente
 # Proveedor
 class Proveedor(models.Model):
     id_proveedor = models.AutoField(primary_key=True)
@@ -19,7 +19,7 @@ class Pedido(models.Model):
         ('Cancelado', 'Cancelado'),
     ]
 
-    id_pedido = models.AutoField(primary_key=True)
+    id_pedido = models.AutoField(primary_key=True) 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     producto = models.CharField(max_length=100)
     cantidad = models.IntegerField()

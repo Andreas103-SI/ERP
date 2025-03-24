@@ -1,0 +1,16 @@
+<!-- proveedores/templates/proveedores/proveedor_confirm_delete.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Proveedor</title>
+</head>
+<body>
+    <h1>Eliminar Proveedor</h1>
+    <p>¿Estás seguro de que quieres eliminar a {{ proveedor.nombre }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+    </form>
+    <a href="{% url 'proveedor_list' %}">Cancelar</a>
+</body>
+</html>

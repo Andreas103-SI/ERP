@@ -1,0 +1,42 @@
+<!-- proveedores/templates/proveedores/proveedor_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Proveedores</title>
+</head>
+<body>
+    <h1>Lista de Proveedores</h1>
+    <a href="{% url 'proveedor_create' %}">Crear Nuevo Proveedor</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Contacto</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proveedor in proveedores %}
+            <tr>
+                <td>{{ proveedor.nombre }}</td>
+                <td>{{ proveedor.contacto }}</td>
+                <td>{{ proveedor.email }}</td>
+                <td>{{ proveedor.telefono }}</td>
+                <td>{{ proveedor.direccion }}</td>
+                <td>
+                    <a href="{% url 'proveedor_update' proveedor.pk %}">Editar</a>
+                    <a href="{% url 'proveedor_delete' proveedor.pk %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No hay proveedores.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

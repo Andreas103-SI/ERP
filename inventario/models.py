@@ -23,7 +23,7 @@ class Vehiculo(models.Model):
     disponibilidad = models.CharField(max_length=15, choices=DISPONIBILIDAD_CHOICES, default='Disponible')
 
     def __str__(self):
-        return f"{self.marca} {self.modelo} ({self.año})"
+        return f"{self.marca} {self.modelo} ({self.anio})"
 
 # Inventario
 class Inventario(models.Model):
