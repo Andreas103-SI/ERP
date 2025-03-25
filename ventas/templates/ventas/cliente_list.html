@@ -6,6 +6,10 @@
 </head>
 <body>
     <h1>Lista de Clientes</h1>
+    <form method="get">
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Buscar por nombre, apellido o email">
+        <button type="submit">Buscar</button>
+    </form>
     <a href="{% url 'ventas:cliente_create' %}">Crear Nuevo Cliente</a>
     <table border="1">
         <thead>

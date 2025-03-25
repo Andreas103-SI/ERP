@@ -6,6 +6,23 @@
 </head>
 <body>
     <h1>Lista de Vehículos</h1>
+    <form method="get">
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Buscar por marca, modelo o características">
+        <label for="marca">Marca:</label>
+        <select name="marca" id="marca">
+            <option value="">Todas</option>
+            {% for marca_option in marcas %}
+            <option value="{{ marca_option }}" {% if marca_option == marca %}selected{% endif %}>{{ marca_option }}</option>
+            {% endfor %}
+        </select>
+        <label for="disponibilidad">Disponibilidad:</label>
+        <select name="disponibilidad" id="disponibilidad">
+            <option value="">Todas</option>
+            <option value="Disponible" {% if disponibilidad == "Disponible" %}selected{% endif %}>Disponible</option>
+            <option value="No Disponible" {% if disponibilidad == "No Disponible" %}selected{% endif %}>No Disponible</option>
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
     <a href="{% url 'inventario:vehiculo_create' %}">Crear Nuevo Vehículo</a>
     <table border="1">
         <thead>
@@ -14,8 +31,10 @@
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Año</th>
-                <th>Número de Bastidor</th>
+                <th>Número Bastidor</th>
+                <th>Características</th>
                 <th>Estado</th>
+                <th>Propietario Anterior</th>
                 <th>Precio</th>
                 <th>Disponibilidad</th>
                 <th>Acciones</th>
@@ -24,12 +43,14 @@
         <tbody>
             {% for vehiculo in vehiculos %}
             <tr>
-                <td>{{ vehiculo.id_vehiculo }}</td>
+                <td>{{ vehiculo.id }}</td>
                 <td>{{ vehiculo.marca }}</td>
                 <td>{{ vehiculo.modelo }}</td>
                 <td>{{ vehiculo.anio }}</td>
                 <td>{{ vehiculo.numero_bastidor }}</td>
+                <td>{{ vehiculo.caracteristicas }}</td>
                 <td>{{ vehiculo.estado }}</td>
+                <td>{{ vehiculo.datos_propietario_anterior }}</td>
                 <td>{{ vehiculo.precio }}</td>
                 <td>{{ vehiculo.disponibilidad }}</td>
                 <td>
@@ -39,7 +60,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="9">No hay vehículos.</td>
+                <td colspan="11">No hay vehículos.</td>
             </tr>
             {% endfor %}
         </tbody>

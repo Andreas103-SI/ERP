@@ -2,11 +2,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lista de Venta-Vehículo</title>
+    <title>Lista de VentaVehiculos</title>
 </head>
 <body>
-    <h1>Lista de Venta-Vehículo</h1>
-    <a href="{% url 'ventas:ventavehiculo_create' %}">Asociar Venta-Vehículo</a>
+    <h1>Lista de VentaVehiculos</h1>
+    <form method="get">
+        <label for="venta">Venta:</label>
+        <select name="venta" id="venta">
+            <option value="">Todas</option>
+            {% for venta in ventas %}
+            <option value="{{ venta.id_venta }}" {% if venta.id_venta|stringformat:"s" == venta_id %}selected{% endif %}>
+                {{ venta.contrato }}
+            </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+    <a href="{% url 'ventas:ventavehiculo_create' %}">Crear Nueva VentaVehiculo</a>
     <table border="1">
         <thead>
             <tr>
@@ -27,7 +39,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="3">No hay asociaciones venta-vehículo.</td>
+                <td colspan="3">No hay registros de VentaVehiculo.</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -1,0 +1,16 @@
+\venv\Scripts\Activate.ps1
+
+python manage.py runserver
+
+python manage.py shell
+
+\c erp_coches
+
+
+Dsierra
+asturias2020
+
+kevin1usuario
+nico@2001
+
+

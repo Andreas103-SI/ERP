@@ -1,0 +1,46 @@
+<!-- finanzas/templates/finanzas/gasto_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Gastos</title>
+</head>
+<body>
+    <h1>Lista de Gastos</h1>
+    <a href="{% url 'finanzas:gasto_create' %}">Crear Nuevo Gasto</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Categoría</th>
+                <th>Fecha</th>
+                <th>Fecha Creación</th>
+                <th>Fecha Actualización</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for gasto in gastos %}
+            <tr>
+                <td>{{ gasto.id }}</td>
+                <td>{{ gasto.descripcion }}</td>
+                <td>{{ gasto.monto }}</td>
+                <td>{{ gasto.categoria }}</td>
+                <td>{{ gasto.fecha }}</td>
+                <td>{{ gasto.fecha_creacion }}</td>
+                <td>{{ gasto.fecha_actualizacion }}</td>
+                <td>
+                    <a href="{% url 'finanzas:gasto_update' gasto.pk %}">Editar</a>
+                    <a href="{% url 'finanzas:gasto_delete' gasto.pk %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">No hay gastos.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

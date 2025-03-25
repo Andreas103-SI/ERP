@@ -6,6 +6,20 @@
 </head>
 <body>
     <h1>Lista de Ventas</h1>
+    <form method="get">
+        <label for="cliente">Cliente:</label>
+        <select name="cliente" id="cliente">
+            <option value="">Todos</option>
+            {% for cliente in clientes %}
+            <option value="{{ cliente.id_cliente }}" {% if cliente.id_cliente|stringformat:"s" == cliente_id %}selected{% endif %}>
+                {{ cliente.nombre }} {{ cliente.apellido }}
+            </option>
+            {% endfor %}
+        </select>
+        <label for="fecha">Fecha:</label>
+        <input type="date" name="fecha" id="fecha" value="{{ fecha }}">
+        <button type="submit">Filtrar</button>
+    </form>
     <a href="{% url 'ventas:venta_create' %}">Crear Nueva Venta</a>
     <table border="1">
         <thead>
@@ -13,6 +27,7 @@
                 <th>ID</th>
                 <th>Cliente</th>
                 <th>Presupuesto</th>
+                <th>Contrato</th>
                 <th>Fecha</th>
                 <th>Valor Venta</th>
                 <th>IVA</th>
@@ -26,6 +41,7 @@
                 <td>{{ venta.id_venta }}</td>
                 <td>{{ venta.cliente }}</td>
                 <td>{{ venta.presupuesto }}</td>
+                <td>{{ venta.contrato }}</td>
                 <td>{{ venta.fecha }}</td>
                 <td>{{ venta.valor_venta }}</td>
                 <td>{{ venta.iva }}</td>
@@ -37,7 +53,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="8">No hay ventas.</td>
+                <td colspan="9">No hay ventas.</td>
             </tr>
             {% endfor %}
         </tbody>
