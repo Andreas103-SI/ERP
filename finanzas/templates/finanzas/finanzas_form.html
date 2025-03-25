@@ -1,16 +1,78 @@
 <!-- finanzas/templates/finanzas/finanzas_form.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Transacción</title>
-</head>
-<body>
-    <h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Transacción</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Guardar</button>
-    </form>
-    <button onclick="history.back()">Volver</button>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {% if form.instance.pk %}
+        Editar Transacción - AutoGest S.L.
+    {% else %}
+        Nueva Transacción - AutoGest S.L.
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Título y botón de regreso -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            {% if form.instance.pk %}
+                Editar Transacción
+            {% else %}
+                Nueva Transacción
+            {% endif %}
+        </h1>
+        <a href="{% url 'core:home' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Regresar a la Página Principal
+        </a>
+    </div>
+
+    <!-- Mensajes -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Formulario -->
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-body p-4">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <!-- Descripción -->
+                    <div class="col-md-6">
+                        <label for="id_descripcion" class="form-label">Descripción</label>
+                        {{ form.descripcion|add_class:"form-control" }}
+                    </div>
+                    <!-- Monto -->
+                    <div class="col-md-6">
+                        <label for="id_monto" class="form-label">Monto</label>
+                        {{ form.monto|add_class:"form-control" }}
+                    </div>
+                    <!-- Fecha -->
+                    <div class="col-md-6">
+                        <label for="id_fecha" class="form-label">Fecha</label>
+                        {{ form.fecha|add_class:"form-control" }}
+                    </div>
+                    <!-- Tipo -->
+                    <div class="col-md-6">
+                        <label for="id_tipo" class="form-label">Tipo</label>
+                        {{ form.tipo|add_class:"form-select" }}
+                    </div>
+                </div>
+                <!-- Botones -->
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="{% url 'finanzas:finanzas_list' %}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir íconos de Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}

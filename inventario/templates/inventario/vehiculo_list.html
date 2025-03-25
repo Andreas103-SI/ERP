@@ -1,13 +1,13 @@
-<!-- Ejemplo genérico para otras apps -->
+<!-- inventario/templates/inventario/vehiculo_list.html -->
 {% extends 'base.html' %}
 
-{% block title %}Lista de [Entidad] - AutoGest S.L.{% endblock %}
+{% block title %}Lista de Vehículos - AutoGest S.L.{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <!-- Título y botón de regreso -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Lista de [Entidad]</h1>
+        <h1>Lista de Vehículos</h1>
         <a href="{% url 'core:home' %}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i> Regresar a la Página Principal
         </a>
@@ -23,52 +23,70 @@
         {% endfor %}
     {% endif %}
 
-    <!-- Formulario de búsqueda (ajustar según la app) -->
+    <!-- Formulario de búsqueda -->
     <form method="get" class="mb-4">
         <div class="row g-3">
             <div class="col-md-4">
-                <label for="search" class="form-label">Buscar</label>
-                <input type="text" name="search" id="search" class="form-control" value="{{ search_query }}" placeholder="Buscar...">
+                <label for="search" class="form-label">Buscar por marca o modelo</label>
+                <input type="text" name="search" id="search" class="form-control" value="{{ search_query }}" placeholder="Ej: Marca, Modelo...">
             </div>
-            <!-- Agregar más filtros según la app -->
         </div>
         <div class="d-flex justify-content-end mt-3">
             <button type="submit" class="btn btn-primary me-2">Filtrar</button>
-            <a href="{% url '[app_name]:[entity]_list' %}" class="btn btn-outline-secondary">Limpiar Filtros</a>
+            <a href="{% url 'inventario:vehiculo_list' %}" class="btn btn-outline-secondary">Limpiar Filtros</a>
         </div>
     </form>
 
-    <!-- Botón para crear un nuevo registro -->
+    <!-- Botón para crear un nuevo vehículo -->
     <div class="mb-3">
-        <a href="{% url '[app_name]:[entity]_create' %}" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Nuevo [Entidad]
+        <a href="{% url 'inventario:vehiculo_create' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nuevo Vehículo
         </a>
     </div>
 
-    <!-- Tabla -->
-    {% if object_list %}
+    <!-- Tabla de vehículos -->
+    {% if vehiculos %}
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
-                        <!-- Ajustar columnas según la app -->
                         <th>ID</th>
-                        <th>Nombre</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Año</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th>Disponibilidad</th>
+                        <th>Stock</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in object_list %}
+                    {% for vehiculo in vehiculos %}
                         <tr>
-                            <td>{{ item.id }}</td>
-                            <td>{{ item.nombre }}</td>
+                            <td>{{ vehiculo.id_vehiculo }}</td>
+                            <td>{{ vehiculo.marca }}</td>
+                            <td>{{ vehiculo.modelo }}</td>
+                            <td>{{ vehiculo.anio }}</td>
+                            <td>{{ vehiculo.precio }}</td>
+                            <td>{{ vehiculo.estado }}</td>
+                            <td>{{ vehiculo.disponibilidad }}</td>
+                            <td>{{ vehiculo.stock }}</td>
                             <td>
-                                <a href="{% url '[app_name]:[entity]_update' item.id %}" class="btn btn-sm btn-primary">
+                                <a href="{% url 'inventario:vehiculo_update' vehiculo.id_vehiculo %}" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil"></i> Editar
                                 </a>
-                                <a href="{% url '[app_name]:[entity]_delete' item.id %}" class="btn btn-sm btn-danger">
+                                <a href="{% url 'inventario:vehiculo_delete' vehiculo.id_vehiculo %}" class="btn btn-sm btn-danger">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="9">
+                                <div class="alert alert-info" role="alert">
+                                    No hay vehículos registrados.
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}
@@ -77,7 +95,7 @@
         </div>
     {% else %}
         <div class="alert alert-info" role="alert">
-            No hay [entidad] registrados.
+            No hay vehículos registrados.
         </div>
     {% endif %}
 </div>

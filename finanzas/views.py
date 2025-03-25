@@ -5,6 +5,9 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Finanzas, Gasto
 from .forms import FinanzasForm, GastoForm
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .serializers import FinanzasSerializer
 
 class FinanzasListView(LoginRequiredMixin, ListView):
     model = Finanzas
@@ -33,16 +36,30 @@ class FinanzasCreateView(LoginRequiredMixin, CreateView):
     template_name = 'finanzas/finanzas_form.html'
     success_url = reverse_lazy('finanzas:finanzas_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Transacción creada exitosamente.")
+        return response
+
 class FinanzasUpdateView(LoginRequiredMixin, UpdateView):
     model = Finanzas
     form_class = FinanzasForm
     template_name = 'finanzas/finanzas_form.html'
     success_url = reverse_lazy('finanzas:finanzas_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Transacción actualizada exitosamente.")
+        return response
+
 class FinanzasDeleteView(LoginRequiredMixin, DeleteView):
     model = Finanzas
     template_name = 'finanzas/finanzas_confirm_delete.html'
     success_url = reverse_lazy('finanzas:finanzas_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Transacción eliminada exitosamente.")
+        return super().delete(request, *args, **kwargs)
 
 class GastoListView(LoginRequiredMixin, ListView):
     model = Gasto
@@ -90,7 +107,21 @@ class GastoUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'finanzas/gasto_form.html'
     success_url = reverse_lazy('finanzas:gasto_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Gasto actualizado exitosamente.")
+        return response
+
 class GastoDeleteView(LoginRequiredMixin, DeleteView):
     model = Gasto
     template_name = 'finanzas/gasto_confirm_delete.html'
     success_url = reverse_lazy('finanzas:gasto_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Gasto eliminado exitosamente.")
+        return super().delete(request, *args, **kwargs)
+
+class FinanzasViewSet(viewsets.ModelViewSet):
+    queryset = Finanzas.objects.all()
+    serializer_class = FinanzasSerializer
+    permission_classes = [IsAuthenticated]

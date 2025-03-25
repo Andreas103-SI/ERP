@@ -1,73 +1,63 @@
 # inventario/views.py
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib import messages
 from .models import Vehiculo
 from .forms import VehiculoForm
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from .serializers import VehiculoSerializer
-from django.db.models import Q
 
-@login_required
-def vehiculo_list(request):
-    vehiculos = Vehiculo.objects.all()
-    search_query = request.GET.get('search', '')
-    marca = request.GET.get('marca', '')
-    disponibilidad = request.GET.get('disponibilidad', '')
-    if search_query:
-        vehiculos = vehiculos.filter(
-            Q(marca__icontains=search_query) |
-            Q(modelo__icontains=search_query) |
-            Q(caracteristicas__icontains=search_query)
-        )
-    if marca:
-        vehiculos = vehiculos.filter(marca__iexact=marca)
-    if disponibilidad:
-        vehiculos = vehiculos.filter(disponibilidad=disponibilidad)
-    marcas = Vehiculo.objects.values_list('marca', flat=True).distinct()
-    return render(request, 'inventario/vehiculo_list.html', {
-        'vehiculos': vehiculos,
-        'search_query': search_query,
-        'marca': marca,
-        'disponibilidad': disponibilidad,
-        'marcas': marcas
-    })
+class VehiculoListView(LoginRequiredMixin, ListView):
+    model = Vehiculo
+    template_name = 'inventario/vehiculo_list.html'
+    context_object_name = 'vehiculos'
 
-@login_required
-def vehiculo_create(request):
-    if request.method == 'POST':
-        form = VehiculoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('inventario:vehiculo_list')
-    else:
-        form = VehiculoForm()
-    return render(request, 'inventario/vehiculo_form.html', {'form': form})
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('search', '')
+        if search_query:
+            queryset = queryset.filter(marca__icontains=search_query) | queryset.filter(modelo__icontains=search_query)
+        return queryset
 
-@login_required
-def vehiculo_update(request, pk):
-    vehiculo = get_object_or_404(Vehiculo, pk=pk)
-    if request.method == 'POST':
-        form = VehiculoForm(request.POST, instance=vehiculo)
-        if form.is_valid():
-            form.save()
-            return redirect('inventario:vehiculo_list')
-    else:
-        form = VehiculoForm(instance=vehiculo)
-    return render(request, 'inventario/vehiculo_form.html', {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
 
-@login_required
-def vehiculo_delete(request, pk):
-    vehiculo = get_object_or_404(Vehiculo, pk=pk)
-    if request.method == 'POST':
-        vehiculo.delete()
-        return redirect('inventario:vehiculo_list')
-    return render(request, 'inventario/vehiculo_confirm_delete.html', {'vehiculo': vehiculo})
+class VehiculoCreateView(LoginRequiredMixin, CreateView):
+    model = Vehiculo
+    form_class = VehiculoForm
+    template_name = 'inventario/vehiculo_form.html'
+    success_url = reverse_lazy('inventario:vehiculo_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Vehículo creado exitosamente.")
+        return response
+
+class VehiculoUpdateView(LoginRequiredMixin, UpdateView):
+    model = Vehiculo
+    form_class = VehiculoForm
+    template_name = 'inventario/vehiculo_form.html'
+    success_url = reverse_lazy('inventario:vehiculo_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Vehículo actualizado exitosamente.")
+        return response
+
+class VehiculoDeleteView(LoginRequiredMixin, DeleteView):
+    model = Vehiculo
+    template_name = 'inventario/vehiculo_confirm_delete.html'
+    success_url = reverse_lazy('inventario:vehiculo_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Vehículo eliminado exitosamente.")
+        return super().delete(request, *args, **kwargs)
 
 class VehiculoViewSet(viewsets.ModelViewSet):
     queryset = Vehiculo.objects.all()
     serializer_class = VehiculoSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ['marca', 'modelo', 'anio', 'estado', 'disponibilidad']
-    search_fields = ['marca', 'modelo', 'caracteristicas', 'datos_propietario_anterior']
-    ordering_fields = ['id', 'marca', 'modelo', 'anio', 'precio']

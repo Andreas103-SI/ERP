@@ -4,6 +4,7 @@ from django.urls import path, include
 from core.views import custom_logout
 from django.contrib.auth.views import LoginView
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ventas/', include('ventas.urls')),
@@ -22,3 +23,4 @@ urlpatterns = [
     path('password_reset/', include('django.contrib.auth.urls')),  # Mantener las rutas de restablecimiento de contraseña
     path('', LoginView.as_view(template_name='registration/login.html'), name='login'),  # Raíz (/) muestra el login
 ]
+
