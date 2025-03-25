@@ -1,123 +1,96 @@
 # finanzas/views.py
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib import messages
 from .models import Finanzas, Gasto
 from .forms import FinanzasForm, GastoForm
-from .serializers import FinanzasSerializer, GastoSerializer
-from django.db.models import Q
 
-@login_required
-def finanzas_list(request):
-    finanzas = Finanzas.objects.all()
-    tipo = request.GET.get('tipo', '')
-    fecha = request.GET.get('fecha', '')
-    if tipo:
-        finanzas = finanzas.filter(tipo=tipo)
-    if fecha:
-        finanzas = finanzas.filter(fecha=fecha)
-    return render(request, 'finanzas/finanzas_list.html', {
-        'finanzas': finanzas,
-        'tipo': tipo,
-        'fecha': fecha
-    })
+class FinanzasListView(LoginRequiredMixin, ListView):
+    model = Finanzas
+    template_name = 'finanzas/finanzas_list.html'
+    context_object_name = 'finanzas'
 
-@login_required
-def finanzas_create(request):
-    if request.method == 'POST':
-        form = FinanzasForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('finanzas:finanzas_list')
-    else:
-        form = FinanzasForm()
-    return render(request, 'finanzas/finanzas_form.html', {'form': form})
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        tipo = self.request.GET.get('tipo', '')
+        fecha = self.request.GET.get('fecha', '')
+        if tipo:
+            queryset = queryset.filter(tipo=tipo)
+        if fecha:
+            queryset = queryset.filter(fecha=fecha)
+        return queryset
 
-@login_required
-def finanzas_update(request, pk):
-    finanzas = get_object_or_404(Finanzas, pk=pk)
-    if request.method == 'POST':
-        form = FinanzasForm(request.POST, instance=finanzas)
-        if form.is_valid():
-            form.save()
-            return redirect('finanzas:finanzas_list')
-    else:
-        form = FinanzasForm(instance=finanzas)
-    return render(request, 'finanzas/finanzas_form.html', {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tipo'] = self.request.GET.get('tipo', '')
+        context['fecha'] = self.request.GET.get('fecha', '')
+        return context
 
-@login_required
-def finanzas_delete(request, pk):
-    finanzas = get_object_or_404(Finanzas, pk=pk)
-    if request.method == 'POST':
-        finanzas.delete()
-        return redirect('finanzas:finanzas_list')
-    return render(request, 'finanzas/finanzas_confirm_delete.html', {'finanzas': finanzas})
+class FinanzasCreateView(LoginRequiredMixin, CreateView):
+    model = Finanzas
+    form_class = FinanzasForm
+    template_name = 'finanzas/finanzas_form.html'
+    success_url = reverse_lazy('finanzas:finanzas_list')
 
-@login_required
-def gasto_list(request):
-    gastos = Gasto.objects.all()
-    search_query = request.GET.get('search', '')
-    categoria = request.GET.get('categoria', '')
-    fecha = request.GET.get('fecha', '')
-    if search_query:
-        gastos = gastos.filter(descripcion__icontains=search_query)
-    if categoria:
-        gastos = gastos.filter(categoria=categoria)
-    if fecha:
-        gastos = gastos.filter(fecha=fecha)
-    categorias = Gasto.objects.values_list('categoria', flat=True).distinct()
-    return render(request, 'finanzas/gasto_list.html', {
-        'gastos': gastos,
-        'search_query': search_query,
-        'categoria': categoria,
-        'fecha': fecha,
-        'categorias': categorias
-    })
+class FinanzasUpdateView(LoginRequiredMixin, UpdateView):
+    model = Finanzas
+    form_class = FinanzasForm
+    template_name = 'finanzas/finanzas_form.html'
+    success_url = reverse_lazy('finanzas:finanzas_list')
 
-@login_required
-def gasto_create(request):
-    if request.method == 'POST':
-        form = GastoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('finanzas:gasto_list')
-    else:
-        form = GastoForm()
-    return render(request, 'finanzas/gasto_form.html', {'form': form})
+class FinanzasDeleteView(LoginRequiredMixin, DeleteView):
+    model = Finanzas
+    template_name = 'finanzas/finanzas_confirm_delete.html'
+    success_url = reverse_lazy('finanzas:finanzas_list')
 
-@login_required
-def gasto_update(request, pk):
-    gasto = get_object_or_404(Gasto, pk=pk)
-    if request.method == 'POST':
-        form = GastoForm(request.POST, instance=gasto)
-        if form.is_valid():
-            form.save()
-            return redirect('finanzas:gasto_list')
-    else:
-        form = GastoForm(instance=gasto)
-    return render(request, 'finanzas/gasto_form.html', {'form': form})
+class GastoListView(LoginRequiredMixin, ListView):
+    model = Gasto
+    template_name = 'finanzas/gasto_list.html'
+    context_object_name = 'gastos'
 
-@login_required
-def gasto_delete(request, pk):
-    gasto = get_object_or_404(Gasto, pk=pk)
-    if request.method == 'POST':
-        gasto.delete()
-        return redirect('finanzas:gasto_list')
-    return render(request, 'finanzas/gasto_confirm_delete.html', {'gasto': gasto})
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('search', '')
+        categoria = self.request.GET.get('categoria', '')
+        fecha = self.request.GET.get('fecha', '')
+        if search_query:
+            queryset = queryset.filter(descripcion__icontains=search_query)
+        if categoria:
+            queryset = queryset.filter(categoria=categoria)
+        if fecha:
+            queryset = queryset.filter(fecha=fecha)
+        return queryset
 
-class FinanzasViewSet(viewsets.ModelViewSet):
-    queryset = Finanzas.objects.all()
-    serializer_class = FinanzasSerializer
-    permission_classes = [IsAuthenticated]
-    filterset_fields = ['tipo', 'venta', 'pedido', 'empleado', 'fecha']
-    search_fields = ['descripcion']
-    ordering_fields = ['id_finanzas', 'fecha', 'valor', 'total']
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        context['categoria'] = self.request.GET.get('categoria', '')
+        context['fecha'] = self.request.GET.get('fecha', '')
+        context['categorias'] = Gasto.objects.values_list('categoria', flat=True).distinct()
+        return context
 
-class GastoViewSet(viewsets.ModelViewSet):
-    queryset = Gasto.objects.all()
-    serializer_class = GastoSerializer
-    permission_classes = [IsAuthenticated]
-    filterset_fields = ['categoria', 'fecha']
-    search_fields = ['descripcion']
-    ordering_fields = ['id', 'fecha', 'monto']
+class GastoCreateView(LoginRequiredMixin, CreateView):
+    model = Gasto
+    form_class = GastoForm
+    template_name = 'finanzas/gasto_form.html'
+    success_url = reverse_lazy('finanzas:gasto_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.warning(
+            self.request,
+            "Gasto creado exitosamente. Debes registrar este gasto como egreso en el módulo de Finanzas."
+        )
+        return response
+
+class GastoUpdateView(LoginRequiredMixin, UpdateView):
+    model = Gasto
+    form_class = GastoForm
+    template_name = 'finanzas/gasto_form.html'
+    success_url = reverse_lazy('finanzas:gasto_list')
+
+class GastoDeleteView(LoginRequiredMixin, DeleteView):
+    model = Gasto
+    template_name = 'finanzas/gasto_confirm_delete.html'
+    success_url = reverse_lazy('finanzas:gasto_list')

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'widget_tweaks',
     # Local apps
     'ventas',
     'inventario',
@@ -164,6 +165,7 @@ REST_FRAMEWORK = {
     'DEFAULT_ORDERING_FIELDS': ['id'],
 }
 
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/'  # La página de login ahora está en la raíz
+LOGIN_REDIRECT_URL = 'core:home'  # Redirige a /home/ después de iniciar sesión
 LOGOUT_REDIRECT_URL = '/'
+

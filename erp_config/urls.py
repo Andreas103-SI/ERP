@@ -1,22 +1,8 @@
-"""
-URL configuration for erp_config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
+# erp_config/urls.py
 from django.contrib import admin
 from django.urls import path, include
+from core.views import custom_logout
+from django.contrib.auth.views import LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +14,11 @@ urlpatterns = [
     path('reportes/', include('reportes.urls')),
     path('proveedores/', include('proveedores.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('core.urls')),
+    path('accounts/logout/', custom_logout, name='logout'),  # Mantener compatibilidad con accounts/logout/
+    path('home/', include('core.urls')),
+    path('login/', LoginView.as_view(), name='login'),  # Mantener /login/ por compatibilidad
+    path('logout/', custom_logout, name='logout'),  # Vista personalizada para logout
+    path('password_change/', include('django.contrib.auth.urls')),  # Mantener las rutas de cambio de contraseña
+    path('password_reset/', include('django.contrib.auth.urls')),  # Mantener las rutas de restablecimiento de contraseña
+    path('', LoginView.as_view(template_name='registration/login.html'), name='login'),  # Raíz (/) muestra el login
 ]

@@ -5,7 +5,7 @@ from . import views
 
 router = DefaultRouter()
 router.register(r'proveedores', views.ProveedorViewSet)
-
+app_name = 'proveedores'
 urlpatterns = [
     path('', views.proveedor_list, name='proveedor_list'),
     path('create/', views.proveedor_create, name='proveedor_create'),

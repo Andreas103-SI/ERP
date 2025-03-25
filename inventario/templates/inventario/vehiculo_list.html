@@ -1,69 +1,87 @@
-<!-- inventario/templates/inventario/vehiculo_list.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Vehículos</title>
-</head>
-<body>
-    <h1>Lista de Vehículos</h1>
-    <form method="get">
-        <input type="text" name="search" value="{{ search_query }}" placeholder="Buscar por marca, modelo o características">
-        <label for="marca">Marca:</label>
-        <select name="marca" id="marca">
-            <option value="">Todas</option>
-            {% for marca_option in marcas %}
-            <option value="{{ marca_option }}" {% if marca_option == marca %}selected{% endif %}>{{ marca_option }}</option>
-            {% endfor %}
-        </select>
-        <label for="disponibilidad">Disponibilidad:</label>
-        <select name="disponibilidad" id="disponibilidad">
-            <option value="">Todas</option>
-            <option value="Disponible" {% if disponibilidad == "Disponible" %}selected{% endif %}>Disponible</option>
-            <option value="No Disponible" {% if disponibilidad == "No Disponible" %}selected{% endif %}>No Disponible</option>
-        </select>
-        <button type="submit">Filtrar</button>
+<!-- Ejemplo genérico para otras apps -->
+{% extends 'base.html' %}
+
+{% block title %}Lista de [Entidad] - AutoGest S.L.{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Título y botón de regreso -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Lista de [Entidad]</h1>
+        <a href="{% url 'core:home' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Regresar a la Página Principal
+        </a>
+    </div>
+
+    <!-- Mensajes -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Formulario de búsqueda (ajustar según la app) -->
+    <form method="get" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="search" class="form-label">Buscar</label>
+                <input type="text" name="search" id="search" class="form-control" value="{{ search_query }}" placeholder="Buscar...">
+            </div>
+            <!-- Agregar más filtros según la app -->
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <button type="submit" class="btn btn-primary me-2">Filtrar</button>
+            <a href="{% url '[app_name]:[entity]_list' %}" class="btn btn-outline-secondary">Limpiar Filtros</a>
+        </div>
     </form>
-    <a href="{% url 'inventario:vehiculo_create' %}">Crear Nuevo Vehículo</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>Año</th>
-                <th>Número Bastidor</th>
-                <th>Características</th>
-                <th>Estado</th>
-                <th>Propietario Anterior</th>
-                <th>Precio</th>
-                <th>Disponibilidad</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for vehiculo in vehiculos %}
-            <tr>
-                <td>{{ vehiculo.id }}</td>
-                <td>{{ vehiculo.marca }}</td>
-                <td>{{ vehiculo.modelo }}</td>
-                <td>{{ vehiculo.anio }}</td>
-                <td>{{ vehiculo.numero_bastidor }}</td>
-                <td>{{ vehiculo.caracteristicas }}</td>
-                <td>{{ vehiculo.estado }}</td>
-                <td>{{ vehiculo.datos_propietario_anterior }}</td>
-                <td>{{ vehiculo.precio }}</td>
-                <td>{{ vehiculo.disponibilidad }}</td>
-                <td>
-                    <a href="{% url 'inventario:vehiculo_update' vehiculo.pk %}">Editar</a>
-                    <a href="{% url 'inventario:vehiculo_delete' vehiculo.pk %}">Eliminar</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="11">No hay vehículos.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+
+    <!-- Botón para crear un nuevo registro -->
+    <div class="mb-3">
+        <a href="{% url '[app_name]:[entity]_create' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nuevo [Entidad]
+        </a>
+    </div>
+
+    <!-- Tabla -->
+    {% if object_list %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <!-- Ajustar columnas según la app -->
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in object_list %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.nombre }}</td>
+                            <td>
+                                <a href="{% url '[app_name]:[entity]_update' item.id %}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </a>
+                                <a href="{% url '[app_name]:[entity]_delete' item.id %}" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            No hay [entidad] registrados.
+        </div>
+    {% endif %}
+</div>
+
+<!-- Incluir íconos de Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}

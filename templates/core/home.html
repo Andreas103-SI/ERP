@@ -1,0 +1,141 @@
+<!-- templates/core/home.html -->
+{% extends 'base.html' %}
+
+{% block title %}Página Principal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <h1 class="mb-4">Bienvenido al Sistema ERP</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Clientes</h5>
+                    <p class="card-text">{{ total_clientes }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Ventas</h5>
+                    <p class="card-text">{{ total_ventas }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Vehículos</h5>
+                    <p class="card-text">{{ total_vehiculos }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Empleados</h5>
+                    <p class="card-text">{{ total_empleados }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">Pedidos</h5>
+                    <p class="card-text">{{ total_pedidos }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Proveedores</h5>
+                    <p class="card-text">{{ total_proveedores }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Transacciones</h5>
+                    <p class="card-text">{{ total_transacciones }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Gastos</h5>
+                    <p class="card-text">{{ total_gastos }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="mb-4">Secciones</h2>
+    <p>Selecciona una sección para comenzar:</p>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ventas</h5>
+                    <p class="card-text">Gestiona clientes, ventas y vehículos vendidos.</p>
+                    <a href="{% url 'ventas:cliente_list' %}" class="btn btn-primary">Ir a Ventas</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Inventario</h5>
+                    <p class="card-text">Administra el inventario de vehículos.</p>
+                    <a href="{% url 'inventario:vehiculo_list' %}" class="btn btn-primary">Ir a Inventario</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Empleados</h5>
+                    <p class="card-text">Gestiona la información de los empleados.</p>
+                    <a href="{% url 'empleados:empleado_list' %}" class="btn btn-primary">Ir a Empleados</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Pedidos</h5>
+                    <p class="card-text">Administra los pedidos a proveedores.</p>
+                    <a href="{% url 'pedidos:pedido_list' %}" class="btn btn-primary">Ir a Pedidos</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Proveedores</h5>
+                    <p class="card-text">Gestiona la información de los proveedores.</p>
+                    <a href="{% url 'proveedores:proveedor_list' %}" class="btn btn-primary">Ir a Proveedores</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Finanzas</h5>
+                    <p class="card-text">Controla las finanzas y gastos del negocio.</p>
+                    <a href="{% url 'finanzas:finanzas_list' %}" class="btn btn-primary">Ir a Finanzas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

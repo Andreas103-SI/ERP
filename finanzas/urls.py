@@ -1,31 +1,28 @@
 # finanzas/urls.py
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 from .views import (
-    FinanzasViewSet, GastoViewSet,
-    finanzas_list, finanzas_create, finanzas_update, finanzas_delete,
-    gasto_list, gasto_create, gasto_update, gasto_delete
+    FinanzasListView,
+    FinanzasCreateView,
+    FinanzasUpdateView,
+    FinanzasDeleteView,
+    GastoListView,
+    GastoCreateView,
+    GastoUpdateView,
+    GastoDeleteView,
 )
-
-router = DefaultRouter()
-router.register(r'finanzas', FinanzasViewSet)
-router.register(r'gastos', GastoViewSet)  # Ahora sí existe
 
 app_name = 'finanzas'
 
 urlpatterns = [
-    # URLs de la API REST
-    path('api/', include(router.urls)),
+    # Rutas para Finanzas
+    path('', FinanzasListView.as_view(), name='finanzas_list'),
+    path('create/', FinanzasCreateView.as_view(), name='finanzas_create'),
+    path('update/<int:pk>/', FinanzasUpdateView.as_view(), name='finanzas_update'),
+    path('delete/<int:pk>/', FinanzasDeleteView.as_view(), name='finanzas_delete'),
 
-    # URLs para vistas basadas en plantillas - Finanzas
-    path('', finanzas_list, name='finanzas_list'),
-    path('create/', finanzas_create, name='finanzas_create'),
-    path('update/<int:pk>/', finanzas_update, name='finanzas_update'),
-    path('delete/<int:pk>/', finanzas_delete, name='finanzas_delete'),
-
-    # URLs para vistas basadas en plantillas - Gastos
-    path('gastos/', gasto_list, name='gasto_list'),
-    path('gastos/create/', gasto_create, name='gasto_create'),
-    path('gastos/update/<int:pk>/', gasto_update, name='gasto_update'),
-    path('gastos/delete/<int:pk>/', gasto_delete, name='gasto_delete'),
+    # Rutas para Gastos
+    path('gastos/', GastoListView.as_view(), name='gasto_list'),
+    path('gastos/create/', GastoCreateView.as_view(), name='gasto_create'),
+    path('gastos/update/<int:pk>/', GastoUpdateView.as_view(), name='gasto_update'),
+    path('gastos/delete/<int:pk>/', GastoDeleteView.as_view(), name='gasto_delete'),
 ]
