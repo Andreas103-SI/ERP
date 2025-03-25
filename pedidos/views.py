@@ -6,11 +6,30 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Pedido, Proveedor
 from .forms import PedidoForm
 from .serializers import PedidoSerializer
+from django.db.models import Q
 
 @login_required
 def pedido_list(request):
     pedidos = Pedido.objects.all()
-    return render(request, 'pedidos/pedido_list.html', {'pedidos': pedidos})
+    search_query = request.GET.get('search', '')
+    proveedor_id = request.GET.get('proveedor', '')
+    estado = request.GET.get('estado', '')
+    if search_query:
+        pedidos = pedidos.filter(producto__icontains=search_query)
+    if proveedor_id:
+        pedidos = pedidos.filter(proveedor__id=proveedor_id)
+    if estado:
+        pedidos = pedidos.filter(estado=estado)
+    proveedores = Proveedor.objects.all()
+    estados = Pedido.objects.values_list('estado', flat=True).distinct()
+    return render(request, 'pedidos/pedido_list.html', {
+        'pedidos': pedidos,
+        'search_query': search_query,
+        'proveedor_id': proveedor_id,
+        'estado': estado,
+        'proveedores': proveedores,
+        'estados': estados
+    })
 
 @login_required
 def pedido_create(request):
@@ -47,6 +66,6 @@ class PedidoViewSet(viewsets.ModelViewSet):
     queryset = Pedido.objects.all()
     serializer_class = PedidoSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ['proveedor', 'estado']  # Filtrar por proveedor o estado
-    search_fields = ['producto']  # Buscar por producto
-    ordering_fields = ['id', 'valor', 'total']  # Ordenar por ID, valor o total
+    filterset_fields = ['proveedor', 'estado']
+    search_fields = ['producto']
+    ordering_fields = ['id', 'valor', 'total']

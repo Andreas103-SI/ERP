@@ -6,6 +6,19 @@
 </head>
 <body>
     <h1>Lista de Gastos</h1>
+    <form method="get">
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Buscar por descripción">
+        <label for="categoria">Categoría:</label>
+        <select name="categoria" id="categoria">
+            <option value="">Todas</option>
+            {% for categoria_option in categorias %}
+            <option value="{{ categoria_option }}" {% if categoria_option == categoria %}selected{% endif %}>{{ categoria_option }}</option>
+            {% endfor %}
+        </select>
+        <label for="fecha">Fecha:</label>
+        <input type="date" name="fecha" id="fecha" value="{{ fecha }}">
+        <button type="submit">Filtrar</button>
+    </form>
     <a href="{% url 'finanzas:gasto_create' %}">Crear Nuevo Gasto</a>
     <table border="1">
         <thead>

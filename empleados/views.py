@@ -6,11 +6,28 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Empleado
 from .forms import EmpleadoForm
 from .serializers import EmpleadoSerializer
+from django.db.models import Q
 
 @login_required
 def empleado_list(request):
     empleados = Empleado.objects.all()
-    return render(request, 'empleados/empleado_list.html', {'empleados': empleados})
+    search_query = request.GET.get('search', '')
+    puesto = request.GET.get('puesto', '')
+    if search_query:
+        empleados = empleados.filter(
+            Q(nombre__icontains=search_query) |
+            Q(apellido__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+    if puesto:
+        empleados = empleados.filter(puesto=puesto)
+    puestos = Empleado.objects.values_list('puesto', flat=True).distinct()
+    return render(request, 'empleados/empleado_list.html', {
+        'empleados': empleados,
+        'search_query': search_query,
+        'puesto': puesto,
+        'puestos': puestos
+    })
 
 @login_required
 def empleado_create(request):
@@ -47,6 +64,6 @@ class EmpleadoViewSet(viewsets.ModelViewSet):
     queryset = Empleado.objects.all()
     serializer_class = EmpleadoSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ['dni', 'puesto']  # Filtrar por DNI o puesto
-    search_fields = ['nombre', 'apellido', 'email']  # Buscar por nombre, apellido o email
-    ordering_fields = ['id', 'nombre', 'apellido', 'salario']  # Ordenar por ID, nombre, apellido o salario
+    filterset_fields = ['dni', 'puesto']
+    search_fields = ['nombre', 'apellido', 'email']
+    ordering_fields = ['id', 'nombre', 'apellido', 'salario']

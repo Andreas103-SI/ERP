@@ -11,6 +11,6 @@
         {% csrf_token %}
         <button type="submit">Sí, eliminar</button>
     </form>
-    <a href="{% url 'empleados:empleado_list' %}">Cancelar</a>
+    <button onclick="history.back()">Volver</button>
 </body>
 </html>

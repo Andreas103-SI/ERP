@@ -2,15 +2,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Asociación Venta-Vehículo</title>
+    <title>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} VentaVehiculo</title>
 </head>
 <body>
-    <h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Asociación Venta-Vehículo</h1>
+    <h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} VentaVehiculo</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Guardar</button>
     </form>
-    <a href="{% url 'ventas:ventavehiculo_list' %}">Volver a la lista</a>
+    <button onclick="history.back()">Volver</button>
 </body>
 </html>

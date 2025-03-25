@@ -1,11 +1,11 @@
-<!-- empleados/templates/empleados/empleado_form.html -->
+<!-- finanzas/templates/finanzas/finanzas_form.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Empleado</title>
+    <title>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Transacción</title>
 </head>
 <body>
-    <h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Empleado</h1>
+    <h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Transacción</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

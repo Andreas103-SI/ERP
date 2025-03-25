@@ -6,11 +6,22 @@ from rest_framework.permissions import IsAuthenticated
 from pedidos.models import Proveedor
 from .forms import ProveedorForm
 from .serializers import ProveedorSerializer
+from django.db.models import Q
 
 @login_required
 def proveedor_list(request):
     proveedores = Proveedor.objects.all()
-    return render(request, 'proveedores/proveedor_list.html', {'proveedores': proveedores})
+    search_query = request.GET.get('search', '')
+    if search_query:
+        proveedores = proveedores.filter(
+            Q(nombre__icontains=search_query) |
+            Q(contacto__icontains=search_query) |
+            Q(producto__icontains=search_query)
+        )
+    return render(request, 'proveedores/proveedor_list.html', {
+        'proveedores': proveedores,
+        'search_query': search_query
+    })
 
 @login_required
 def proveedor_create(request):
@@ -47,6 +58,6 @@ class ProveedorViewSet(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
     serializer_class = ProveedorSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ['nombre']  # Filtrar por nombre
-    search_fields = ['nombre', 'contacto', 'producto']  # Buscar por nombre, contacto o producto
-    ordering_fields = ['id_proveedor', 'nombre']  # Ordenar por ID o nombre
+    filterset_fields = ['nombre']
+    search_fields = ['nombre', 'contacto', 'producto']
+    ordering_fields = ['id_proveedor', 'nombre']

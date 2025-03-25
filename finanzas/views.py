@@ -6,11 +6,22 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Finanzas, Gasto
 from .forms import FinanzasForm, GastoForm
 from .serializers import FinanzasSerializer, GastoSerializer
+from django.db.models import Q
 
 @login_required
 def finanzas_list(request):
     finanzas = Finanzas.objects.all()
-    return render(request, 'finanzas/finanzas_list.html', {'finanzas': finanzas})
+    tipo = request.GET.get('tipo', '')
+    fecha = request.GET.get('fecha', '')
+    if tipo:
+        finanzas = finanzas.filter(tipo=tipo)
+    if fecha:
+        finanzas = finanzas.filter(fecha=fecha)
+    return render(request, 'finanzas/finanzas_list.html', {
+        'finanzas': finanzas,
+        'tipo': tipo,
+        'fecha': fecha
+    })
 
 @login_required
 def finanzas_create(request):
@@ -46,7 +57,23 @@ def finanzas_delete(request, pk):
 @login_required
 def gasto_list(request):
     gastos = Gasto.objects.all()
-    return render(request, 'finanzas/gasto_list.html', {'gastos': gastos})
+    search_query = request.GET.get('search', '')
+    categoria = request.GET.get('categoria', '')
+    fecha = request.GET.get('fecha', '')
+    if search_query:
+        gastos = gastos.filter(descripcion__icontains=search_query)
+    if categoria:
+        gastos = gastos.filter(categoria=categoria)
+    if fecha:
+        gastos = gastos.filter(fecha=fecha)
+    categorias = Gasto.objects.values_list('categoria', flat=True).distinct()
+    return render(request, 'finanzas/gasto_list.html', {
+        'gastos': gastos,
+        'search_query': search_query,
+        'categoria': categoria,
+        'fecha': fecha,
+        'categorias': categorias
+    })
 
 @login_required
 def gasto_create(request):
@@ -83,14 +110,14 @@ class FinanzasViewSet(viewsets.ModelViewSet):
     queryset = Finanzas.objects.all()
     serializer_class = FinanzasSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ['tipo', 'venta', 'pedido', 'empleado', 'fecha']  # Filtrar por tipo, venta, pedido, empleado o fecha
-    search_fields = ['descripcion']  # Buscar por descripción
-    ordering_fields = ['id_finanzas', 'fecha', 'valor', 'total']  # Ordenar por ID, fecha, valor o total
+    filterset_fields = ['tipo', 'venta', 'pedido', 'empleado', 'fecha']
+    search_fields = ['descripcion']
+    ordering_fields = ['id_finanzas', 'fecha', 'valor', 'total']
 
 class GastoViewSet(viewsets.ModelViewSet):
     queryset = Gasto.objects.all()
     serializer_class = GastoSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ['categoria', 'fecha']  # Filtrar por categoría o fecha
-    search_fields = ['descripcion']  # Buscar por descripción
-    ordering_fields = ['id', 'fecha', 'monto']  # Ordenar por ID, fecha o monto
+    filterset_fields = ['categoria', 'fecha']
+    search_fields = ['descripcion']
+    ordering_fields = ['id', 'fecha', 'monto']

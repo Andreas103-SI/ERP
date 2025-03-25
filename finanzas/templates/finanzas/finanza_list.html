@@ -1,22 +1,63 @@
+<!-- finanzas/templates/finanzas/finanzas_list.html -->
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Finanzas - Autogest ERP</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>Lista de Finanzas</title>
 </head>
 <body>
-    <h2>Lista de Finanzas</h2>
-    <ul>
-        {% for finanza in finanzas %}
-            <li>{{ finanza.descripcion }} - {{ finanza.total }} ({{ finanza.tipo }}) - Fecha: {{ finanza.fecha }}</li>
-        {% empty %}
-            <li>No hay registros financieros.</li>
-        {% endfor %}
-    </ul>
-    <p><a href="{% url 'home' %}">Volver al Inicio</a></p>
-    <p><a href="{% url 'logout' %}">Cerrar Sesión</a></p>
+    <h1>Lista de Finanzas</h1>
+    <form method="get">
+        <label for="tipo">Tipo:</label>
+        <select name="tipo" id="tipo">
+            <option value="">Todos</option>
+            <option value="Ingreso" {% if tipo == "Ingreso" %}selected{% endif %}>Ingreso</option>
+            <option value="Egreso" {% if tipo == "Egreso" %}selected{% endif %}>Egreso</option>
+        </select>
+        <label for="fecha">Fecha:</label>
+        <input type="date" name="fecha" id="fecha" value="{{ fecha }}">
+        <button type="submit">Filtrar</button>
+    </form>
+    <a href="{% url 'finanzas:finanzas_create' %}">Crear Nueva Transacción</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Venta</th>
+                <th>Pedido</th>
+                <th>Empleado</th>
+                <th>Descripción</th>
+                <th>Valor</th>
+                <th>IVA</th>
+                <th>Total</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for finanza in finanzas %}
+            <tr>
+                <td>{{ finanza.id_finanzas }}</td>
+                <td>{{ finanza.tipo }}</td>
+                <td>{{ finanza.venta|default:"-" }}</td>
+                <td>{{ finanza.pedido|default:"-" }}</td>
+                <td>{{ finanza.empleado|default:"-" }}</td>
+                <td>{{ finanza.descripcion }}</td>
+                <td>{{ finanza.valor }}</td>
+                <td>{{ finanza.iva }}</td>
+                <td>{{ finanza.total }}</td>
+                <td>{{ finanza.fecha }}</td>
+                <td>
+                    <a href="{% url 'finanzas:finanzas_update' finanza.pk %}">Editar</a>
+                    <a href="{% url 'finanzas:finanzas_delete' finanza.pk %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="11">No hay transacciones.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
