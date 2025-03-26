@@ -37,9 +37,15 @@ class FinanzasCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('finanzas:finanzas_list')
 
     def form_valid(self, form):
+        print("Formulario válido, guardando y redirigiendo...")  # Depuración
         response = super().form_valid(form)
         messages.success(self.request, "Transacción creada exitosamente.")
+        print(f"Redirigiendo a: {self.success_url}")  # Depuración
         return response
+
+    def form_invalid(self, form):
+        print("Formulario no válido:", form.errors)  # Depuración
+        return super().form_invalid(form)
 
 class FinanzasUpdateView(LoginRequiredMixin, UpdateView):
     model = Finanzas

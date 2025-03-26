@@ -72,8 +72,23 @@
                     </div>
                     <!-- Venta -->
                     <div class="col-md-6">
-                        <label for="id_venta" class="form-label">Venta</label>
-                        {{ form.venta|add_class:"form-control" }}
+                        <label for="id_venta" class="form-label">Venta (Opcional)</label>
+                        {{ form.venta|add_class:"form-select" }}
+                    </div>
+                    <!-- Pedido -->
+                    <div class="col-md-6">
+                        <label for="id_pedido" class="form-label">Pedido (Opcional)</label>
+                        {{ form.pedido|add_class:"form-select" }}
+                    </div>
+                    <!-- Empleado -->
+                    <div class="col-md-6">
+                        <label for="id_empleado" class="form-label">Empleado (Opcional)</label>
+                        {{ form.empleado|add_class:"form-select" }}
+                    </div>
+                    <!-- Valor -->
+                    <div class="col-md-6">
+                        <label for="id_valor" class="form-label">Valor</label>
+                        {{ form.valor|add_class:"form-control" }}
                     </div>
                     <!-- IVA -->
                     <div class="col-md-6">
