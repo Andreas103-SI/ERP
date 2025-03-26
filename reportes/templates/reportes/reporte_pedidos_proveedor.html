@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Reporte de Pedidos por Proveedor - AutoGest S.L.{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Título y botón de regreso -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Reporte de Pedidos por Proveedor</h1>
+        <a href="{% url 'core:home' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Regresar a la Página Principal
+        </a>
+    </div>
+
+    <!-- Mensajes -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Formulario de filtros -->
+    <form method="get" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="proveedor_id" class="form-label">Proveedor</label>
+                <select name="proveedor_id" id="proveedor_id" class="form-select">
+                    <option value="">Todos</option>
+                    {% for proveedor in proveedores %}
+                        <option value="{{ proveedor.proveedor__id_proveedor }}" {% if proveedor.proveedor__id_proveedor|stringformat:"s" == proveedor_id %}selected{% endif %}>
+                            {{ proveedor.proveedor__nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="estado" class="form-label">Estado</label>
+                <select name="estado" id="estado" class="form-select">
+                    <option value="">Todos</option>
+                    {% for estado_item in estados %}
+                        <option value="{{ estado_item }}" {% if estado_item == estado %}selected{% endif %}>{{ estado_item }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
+                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" value="{{ fecha_inicio }}">
+            </div>
+            <div class="col-md-4">
+                <label for="fecha_fin" class="form-label">Fecha Fin</label>
+                <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" value="{{ fecha_fin }}">
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <button type="submit" class="btn btn-primary me-2">Filtrar</button>
+            <a href="{% url 'reportes:reporte_pedidos_proveedor' %}" class="btn btn-outline-secondary">Limpiar Filtros</a>
+        </div>
+    </form>
+
+    <!-- Tabla de reporte -->
+    {% if reporte %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Proveedor</th>
+                        <th>Total Pedidos</th>
+                        <th>Total Valor</th>
+                        <th>Total IVA</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in reporte %}
+                        <tr>
+                            <td>{{ item.proveedor__nombre }}</td>
+                            <td>{{ item.total_pedidos }}</td>
+                            <td>{{ item.total_valor }}</td>
+                            <td>{{ item.total_iva }}</td>
+                            <td>{{ item.total }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">
+                                <div class="alert alert-info" role="alert">
+                                    No hay datos para mostrar.
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            No hay datos para mostrar.
+        </div>
+    {% endif %}
+</div>
+
+<!-- Incluir íconos de Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}

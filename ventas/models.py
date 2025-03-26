@@ -1,3 +1,4 @@
+# ventas/models.py
 from django.db import models
 from inventario.models import Vehiculo  # Importamos Vehiculo desde la app inventario
 

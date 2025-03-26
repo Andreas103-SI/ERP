@@ -1,3 +1,4 @@
+# finanzas/models.py
 from django.db import models
 from ventas.models import Venta
 from pedidos.models import Pedido

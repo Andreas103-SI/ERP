@@ -29,7 +29,7 @@ class FinanzasListView(LoginRequiredMixin, ListView):
         context['tipo'] = self.request.GET.get('tipo', '')
         context['fecha'] = self.request.GET.get('fecha', '')
         return context
-
+    
 class FinanzasCreateView(LoginRequiredMixin, CreateView):
     model = Finanzas
     form_class = FinanzasForm
