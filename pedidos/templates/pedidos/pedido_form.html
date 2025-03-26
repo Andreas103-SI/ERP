@@ -42,30 +42,45 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="row g-3">
-                    <!-- Cliente -->
+                    <!-- Proveedor -->
                     <div class="col-md-6">
-                        <label for="id_cliente" class="form-label">Cliente</label>
-                        {{ form.cliente|add_class:"form-select" }}
+                        <label for="id_proveedor" class="form-label">Proveedor</label>
+                        {{ form.proveedor|add_class:"form-select" }}
                     </div>
-                    <!-- Vehículo -->
+                    <!-- Producto -->
                     <div class="col-md-6">
-                        <label for="id_vehiculo" class="form-label">Vehículo</label>
-                        {{ form.vehiculo|add_class:"form-select" }}
+                        <label for="id_producto" class="form-label">Producto</label>
+                        {{ form.producto|add_class:"form-control" }}
                     </div>
-                    <!-- Fecha del Pedido -->
+                    <!-- Cantidad -->
                     <div class="col-md-6">
-                        <label for="id_fecha_pedido" class="form-label">Fecha del Pedido</label>
-                        {{ form.fecha_pedido|add_class:"form-control" }}
+                        <label for="id_cantidad" class="form-label">Cantidad</label>
+                        {{ form.cantidad|add_class:"form-control" }}
+                    </div>
+                    <!-- Valor -->
+                    <div class="col-md-6">
+                        <label for="id_valor" class="form-label">Valor</label>
+                        {{ form.valor|add_class:"form-control" }}
                     </div>
                     <!-- Estado -->
                     <div class="col-md-6">
                         <label for="id_estado" class="form-label">Estado</label>
                         {{ form.estado|add_class:"form-select" }}
                     </div>
+                    <!-- IVA -->
+                    <div class="col-md-6">
+                        <label for="id_iva" class="form-label">IVA</label>
+                        {{ form.iva|add_class:"form-control" }}
+                    </div>
                     <!-- Total -->
                     <div class="col-md-6">
                         <label for="id_total" class="form-label">Total</label>
                         {{ form.total|add_class:"form-control" }}
+                    </div>
+                    <!-- Fecha del Pedido -->
+                    <div class="col-md-6">
+                        <label for="id_fecha_pedido" class="form-label">Fecha del Pedido</label>
+                        {{ form.fecha_pedido|add_class:"form-control" }}
                     </div>
                 </div>
                 <!-- Botones -->

@@ -5,6 +5,9 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Pedido
 from .forms import PedidoForm
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .serializers import PedidoSerializer
 
 class PedidoListView(LoginRequiredMixin, ListView):
     model = Pedido
@@ -16,7 +19,7 @@ class PedidoListView(LoginRequiredMixin, ListView):
         search_query = self.request.GET.get('search', '')
         estado = self.request.GET.get('estado', '')
         if search_query:
-            queryset = queryset.filter(cliente__nombre__icontains=search_query)
+            queryset = queryset.filter(proveedor__nombre__icontains=search_query) | queryset.filter(producto__icontains=search_query)
         if estado:
             queryset = queryset.filter(estado=estado)
         return queryset
@@ -25,7 +28,7 @@ class PedidoListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('search', '')
         context['estado_selected'] = self.request.GET.get('estado', '')
-        context['estados'] = Pedido.objects.values_list('estado', flat=True).distinct()
+        context['estados'] = [choice[0] for choice in Pedido._meta.get_field('estado').choices]
         return context
 
 class PedidoCreateView(LoginRequiredMixin, CreateView):
@@ -58,3 +61,8 @@ class PedidoDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Pedido eliminado exitosamente.")
         return super().delete(request, *args, **kwargs)
+
+class PedidoViewSet(viewsets.ModelViewSet):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+    permission_classes = [IsAuthenticated]

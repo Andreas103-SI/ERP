@@ -9,7 +9,7 @@ class Cliente(models.Model):
     dni_pasaporte = models.CharField(max_length=20, unique=True)
     telefono = models.CharField(max_length=15)
     email = models.EmailField(unique=True)
-    direccion = models.TextField()
+    direccion = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"

@@ -1,15 +1,24 @@
 # proveedores/urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from . import views
+from .views import (
+    ProveedorListView,
+    ProveedorCreateView,
+    ProveedorUpdateView,
+    ProveedorDeleteView,
+    ProveedorViewSet,
+)
 
-router = DefaultRouter()
-router.register(r'proveedores', views.ProveedorViewSet)
 app_name = 'proveedores'
+
+# Configurar el router para la API
+router = DefaultRouter()
+router.register(r'proveedores', ProveedorViewSet)
+
 urlpatterns = [
-    path('', views.proveedor_list, name='proveedor_list'),
-    path('create/', views.proveedor_create, name='proveedor_create'),
-    path('update/<int:pk>/', views.proveedor_update, name='proveedor_update'),
-    path('delete/<int:pk>/', views.proveedor_delete, name='proveedor_delete'),
+    path('', ProveedorListView.as_view(), name='proveedor_list'),
+    path('create/', ProveedorCreateView.as_view(), name='proveedor_create'),
+    path('update/<int:pk>/', ProveedorUpdateView.as_view(), name='proveedor_update'),
+    path('delete/<int:pk>/', ProveedorDeleteView.as_view(), name='proveedor_delete'),
     path('api/', include(router.urls)),
 ]

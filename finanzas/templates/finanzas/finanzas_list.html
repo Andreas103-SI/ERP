@@ -75,10 +75,10 @@
                             <td>{{ transaccion.fecha }}</td>
                             <td>{{ transaccion.tipo }}</td>
                             <td>
-                                <a href="{% url 'finanzas:finanzas_update' transaccion.id %}" class="btn btn-sm btn-primary">
+                                <a href="{% url 'finanzas:finanzas_update' transaccion.id_finanzas %}" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil"></i> Editar
                                 </a>
-                                <a href="{% url 'finanzas:finanzas_delete' transaccion.id %}" class="btn btn-sm btn-danger">
+                                <a href="{% url 'finanzas:finanzas_delete' transaccion.id_finanzas %}" class="btn btn-sm btn-danger">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
                             </td>

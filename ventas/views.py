@@ -5,6 +5,10 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Cliente
 from .forms import ClienteForm
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .serializers import ClienteSerializer, VentaSerializer, VentaVehiculoSerializer
+from .models import Venta, VentaVehiculo
 
 class ClienteListView(LoginRequiredMixin, ListView):
     model = Cliente
@@ -53,3 +57,18 @@ class ClienteDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Cliente eliminado exitosamente.")
         return super().delete(request, *args, **kwargs)
+
+class ClienteViewSet(viewsets.ModelViewSet):
+    queryset = Cliente.objects.all()
+    serializer_class = ClienteSerializer
+    permission_classes = [IsAuthenticated]
+
+class VentaViewSet(viewsets.ModelViewSet):
+    queryset = Venta.objects.all()
+    serializer_class = VentaSerializer
+    permission_classes = [IsAuthenticated]
+
+class VentaVehiculoViewSet(viewsets.ModelViewSet):
+    queryset = VentaVehiculo.objects.all()
+    serializer_class = VentaVehiculoSerializer
+    permission_classes = [IsAuthenticated]

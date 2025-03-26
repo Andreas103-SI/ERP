@@ -5,6 +5,11 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Empleado
 from .forms import EmpleadoForm
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .serializers import EmpleadoSerializer
+
+
 
 class EmpleadoListView(LoginRequiredMixin, ListView):
     model = Empleado
@@ -58,3 +63,8 @@ class EmpleadoDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Empleado eliminado exitosamente.")
         return super().delete(request, *args, **kwargs)
+
+class EmpleadoViewSet(viewsets.ModelViewSet):
+    queryset = Empleado.objects.all()
+    serializer_class = EmpleadoSerializer
+    permission_classes = [IsAuthenticated]

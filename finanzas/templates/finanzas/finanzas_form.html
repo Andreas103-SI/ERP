@@ -4,9 +4,9 @@
 
 {% block title %}
     {% if form.instance.pk %}
-        Editar Transacción - AutoGest S.L.
+        Editar Registro Financiero - AutoGest S.L.
     {% else %}
-        Nueva Transacción - AutoGest S.L.
+        Nuevo Registro Financiero - AutoGest S.L.
     {% endif %}
 {% endblock %}
 
@@ -16,9 +16,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>
             {% if form.instance.pk %}
-                Editar Transacción
+                Editar Registro Financiero
             {% else %}
-                Nueva Transacción
+                Nuevo Registro Financiero
             {% endif %}
         </h1>
         <a href="{% url 'core:home' %}" class="btn btn-outline-secondary">
@@ -36,31 +36,59 @@
         {% endfor %}
     {% endif %}
 
+    <!-- Errores del formulario -->
+    {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error:</strong> Por favor corrige los siguientes errores:
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
     <!-- Formulario -->
     <div class="card shadow-lg border-0 rounded-3">
         <div class="card-body p-4">
             <form method="post">
                 {% csrf_token %}
                 <div class="row g-3">
+                    <!-- Tipo -->
+                    <div class="col-md-6">
+                        <label for="id_tipo" class="form-label">Tipo</label>
+                        {{ form.tipo|add_class:"form-select" }}
+                    </div>
                     <!-- Descripción -->
                     <div class="col-md-6">
                         <label for="id_descripcion" class="form-label">Descripción</label>
                         {{ form.descripcion|add_class:"form-control" }}
                     </div>
-                    <!-- Monto -->
+                    <!-- Venta -->
                     <div class="col-md-6">
-                        <label for="id_monto" class="form-label">Monto</label>
-                        {{ form.monto|add_class:"form-control" }}
+                        <label for="id_venta" class="form-label">Venta</label>
+                        {{ form.venta|add_class:"form-control" }}
+                    </div>
+                    <!-- IVA -->
+                    <div class="col-md-6">
+                        <label for="id_iva" class="form-label">IVA</label>
+                        {{ form.iva|add_class:"form-control" }}
+                    </div>
+                    <!-- Total -->
+                    <div class="col-md-6">
+                        <label for="id_total" class="form-label">Total</label>
+                        {{ form.total|add_class:"form-control" }}
                     </div>
                     <!-- Fecha -->
                     <div class="col-md-6">
                         <label for="id_fecha" class="form-label">Fecha</label>
                         {{ form.fecha|add_class:"form-control" }}
-                    </div>
-                    <!-- Tipo -->
-                    <div class="col-md-6">
-                        <label for="id_tipo" class="form-label">Tipo</label>
-                        {{ form.tipo|add_class:"form-select" }}
                     </div>
                 </div>
                 <!-- Botones -->

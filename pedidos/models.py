@@ -1,5 +1,7 @@
+# pedidos/models.py
 from django.db import models
 from ventas.models import Cliente
+
 # Proveedor
 class Proveedor(models.Model):
     id_proveedor = models.AutoField(primary_key=True)
@@ -27,6 +29,7 @@ class Pedido(models.Model):
     estado = models.CharField(max_length=15, choices=ESTADO_CHOICES, default='Pendiente')
     iva = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_pedido = models.DateField()
 
     def __str__(self):
         return f"Pedido {self.id_pedido} - {self.proveedor}"

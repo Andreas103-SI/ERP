@@ -91,10 +91,10 @@
                             <td>{{ pedido.proveedor.nombre }}</td>
                             <td>{{ pedido.estado }}</td>
                             <td>
-                                <a href="{% url 'pedidos:pedido_update' pedido.id %}" class="btn btn-sm btn-primary">
+                                <a href="{% url 'pedidos:pedido_update' pedido.id_pedido %}" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil"></i> Editar
                                 </a>
-                                <a href="{% url 'pedidos:pedido_delete' pedido.id %}" class="btn btn-sm btn-danger">
+                                <a href="{% url 'pedidos:pedido_delete' pedido.id_pedido %}" class="btn btn-sm btn-danger">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
                             </td>
