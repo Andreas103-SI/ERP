@@ -1,3 +1,5 @@
+import csv
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
@@ -13,7 +15,7 @@ from pedidos.models import Pedido
 from inventario.models import Inventario, Producto
 from empleados.models import Empleado
 
-# Reporte de Ingresos y Egresos por Mes 
+# Reporte de Ingresos y Egresos por Mes
 class IngresosEgresosPorMesView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -61,6 +63,26 @@ class IngresosEgresosListView(LoginRequiredMixin, ListView):
         context['fecha_fin'] = self.request.GET.get('fecha_fin', '')
         return context
 
+    def render_to_response(self, context, **response_kwargs):
+        if 'export' in self.request.GET:
+            # Exportar a CSV
+            queryset = self.get_queryset()
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="reporte_ingresos_egresos.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Mes', 'Tipo', 'Total'])  # Encabezados
+
+            for item in queryset:
+                writer.writerow([
+                    item['mes'].strftime('%Y-%m'),
+                    item['tipo'],
+                    item['total']
+                ])
+
+            return response
+        return super().render_to_response(context, **response_kwargs)
+
 # Reporte de Ventas por Cliente
 class VentasPorClienteView(APIView):
     permission_classes = [IsAuthenticated]
@@ -72,7 +94,7 @@ class VentasPorClienteView(APIView):
 
         queryset = Venta.objects.all()
         if cliente_id:
-            queryset = queryset.filter(cliente__id_cliente=cliente_id)  # Cambiar cliente_id a cliente__id_cliente
+            queryset = queryset.filter(cliente__id_cliente=cliente_id)
         if fecha_inicio:
             queryset = queryset.filter(fecha__gte=fecha_inicio)
         if fecha_fin:
@@ -97,7 +119,7 @@ class VentasPorClienteListView(LoginRequiredMixin, ListView):
 
         queryset = Venta.objects.all()
         if cliente_id:
-            queryset = queryset.filter(cliente__id_cliente=cliente_id)  # Cambiar cliente_id a cliente__id_cliente
+            queryset = queryset.filter(cliente__id_cliente=cliente_id)
         if fecha_inicio:
             queryset = queryset.filter(fecha__gte=fecha_inicio)
         if fecha_fin:
@@ -111,11 +133,33 @@ class VentasPorClienteListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['clientes'] = Venta.objects.values('cliente__id_cliente', 'cliente__nombre', 'cliente__apellido').distinct()  # Cambiar cliente__id a cliente__id_cliente
+        context['clientes'] = Venta.objects.values('cliente__id_cliente', 'cliente__nombre', 'cliente__apellido').distinct()
         context['cliente_id'] = self.request.GET.get('cliente_id', '')
         context['fecha_inicio'] = self.request.GET.get('fecha_inicio', '')
         context['fecha_fin'] = self.request.GET.get('fecha_fin', '')
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if 'export' in self.request.GET:
+            # Exportar a CSV
+            queryset = self.get_queryset()
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="reporte_ventas_cliente.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Cliente', 'Total Valor', 'Total IVA', 'Total Ventas'])  # Encabezados
+
+            for item in queryset:
+                cliente_nombre = f"{item['cliente__nombre']} {item['cliente__apellido']}"
+                writer.writerow([
+                    cliente_nombre,
+                    item['total_valor'],
+                    item['total_iva'],
+                    item['total_ventas']
+                ])
+
+            return response
+        return super().render_to_response(context, **response_kwargs)
 
 # Reporte de Pedidos por Proveedor
 class PedidosPorProveedorView(APIView):
@@ -129,7 +173,7 @@ class PedidosPorProveedorView(APIView):
 
         queryset = Pedido.objects.all()
         if proveedor_id:
-            queryset = queryset.filter(proveedor__id_proveedor=proveedor_id)  # Cambiar proveedor_id a proveedor__id_proveedor
+            queryset = queryset.filter(proveedor__id_proveedor=proveedor_id)
         if estado:
             queryset = queryset.filter(estado=estado)
         if fecha_inicio:
@@ -145,7 +189,6 @@ class PedidosPorProveedorView(APIView):
         ).order_by('proveedor__nombre')
 
         return Response(pedidos)
-    
 
 class PedidosPorProveedorListView(LoginRequiredMixin, ListView):
     template_name = 'reportes/reporte_pedidos_proveedor.html'
@@ -159,7 +202,7 @@ class PedidosPorProveedorListView(LoginRequiredMixin, ListView):
 
         queryset = Pedido.objects.all()
         if proveedor_id:
-            queryset = queryset.filter(proveedor__id_proveedor=proveedor_id)  # Cambiar proveedor_id a proveedor__id_proveedor
+            queryset = queryset.filter(proveedor__id_proveedor=proveedor_id)
         if estado:
             queryset = queryset.filter(estado=estado)
         if fecha_inicio:
@@ -176,14 +219,36 @@ class PedidosPorProveedorListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['proveedores'] = Pedido.objects.values('proveedor__id_proveedor', 'proveedor__nombre').distinct()  # Cambiar proveedor__id a proveedor__id_proveedor
+        context['proveedores'] = Pedido.objects.values('proveedor__id_proveedor', 'proveedor__nombre').distinct()
         context['estados'] = [choice[0] for choice in Pedido._meta.get_field('estado').choices]
         context['proveedor_id'] = self.request.GET.get('proveedor_id', '')
         context['estado'] = self.request.GET.get('estado', '')
         context['fecha_inicio'] = self.request.GET.get('fecha_inicio', '')
         context['fecha_fin'] = self.request.GET.get('fecha_fin', '')
         return context
-    
+
+    def render_to_response(self, context, **response_kwargs):
+        if 'export' in self.request.GET:
+            # Exportar a CSV
+            queryset = self.get_queryset()
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="reporte_pedidos_proveedor.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Proveedor', 'Total Pedidos', 'Total Valor', 'Total IVA', 'Total'])  # Encabezados
+
+            for item in queryset:
+                writer.writerow([
+                    item['proveedor__nombre'],
+                    item['total_pedidos'],
+                    item['total_valor'],
+                    item['total_iva'],
+                    item['total']
+                ])
+
+            return response
+        return super().render_to_response(context, **response_kwargs)
+
 # Reporte de Inventario
 class InventarioReporteView(APIView):
     permission_classes = [IsAuthenticated]
@@ -232,6 +297,44 @@ class InventarioReporteListView(LoginRequiredMixin, ListView):
         context['tipos'] = [choice[0] for choice in Inventario._meta.get_field('tipo').choices]
         context['tipo'] = tipo
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if 'export' in self.request.GET:
+            # Exportar a CSV
+            queryset = self.get_queryset()
+            productos = self.get_context_data()['productos']
+
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="reporte_inventario.csv"'
+
+            writer = csv.writer(response)
+            # Exportar Inventario
+            writer.writerow(['--- Inventario ---'])
+            writer.writerow(['Tipo', 'Producto', 'Vehículo', 'Cantidad Total'])
+            for item in queryset:
+                vehiculo = f"{item['vehiculo__marca'] or ''} {item['vehiculo__modelo'] or ''}".strip() or '-'
+                writer.writerow([
+                    item['tipo'],
+                    item['nombre_producto'] or '-',
+                    vehiculo,
+                    item['total_cantidad']
+                ])
+
+            # Exportar Productos
+            writer.writerow([])  # Línea en blanco
+            writer.writerow(['--- Productos ---'])
+            writer.writerow(['Nombre', 'Stock', 'Stock Mínimo', 'Estado'])
+            for producto in productos:
+                estado = 'Stock Bajo' if producto.stock < producto.stock_minimo else 'Stock Suficiente'
+                writer.writerow([
+                    producto.nombre,
+                    producto.stock,
+                    producto.stock_minimo,
+                    estado
+                ])
+
+            return response
+        return super().render_to_response(context, **response_kwargs)
 
 # Reporte de Gastos por Categoría
 class GastosPorCategoriaView(APIView):
@@ -285,6 +388,25 @@ class GastosPorCategoriaListView(LoginRequiredMixin, ListView):
         context['fecha_fin'] = self.request.GET.get('fecha_fin', '')
         return context
 
+    def render_to_response(self, context, **response_kwargs):
+        if 'export' in self.request.GET:
+            # Exportar a CSV
+            queryset = self.get_queryset()
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="reporte_gastos_categoria.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Categoría', 'Total Monto'])  # Encabezados
+
+            for item in queryset:
+                writer.writerow([
+                    item['categoria'],
+                    item['total_monto']
+                ])
+
+            return response
+        return super().render_to_response(context, **response_kwargs)
+
 # Reporte de Empleados
 class EmpleadosReporteView(APIView):
     permission_classes = [IsAuthenticated]
@@ -325,6 +447,26 @@ class EmpleadosReporteListView(LoginRequiredMixin, ListView):
         context['puesto'] = self.request.GET.get('puesto', '')
         return context
 
+    def render_to_response(self, context, **response_kwargs):
+        if 'export' in self.request.GET:
+            # Exportar a CSV
+            queryset = self.get_queryset()
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="reporte_empleados.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Puesto', 'Total Empleados', 'Total Salario'])  # Encabezados
+
+            for item in queryset:
+                writer.writerow([
+                    item['puesto'],
+                    item['total_empleados'],
+                    item['total_salario']
+                ])
+
+            return response
+        return super().render_to_response(context, **response_kwargs)
+
 # Reporte de Ventas por Mes (Ya Existente)
 class VentasPorMesView(APIView):
     permission_classes = [IsAuthenticated]
@@ -340,4 +482,21 @@ def reporte_ventas(request):
     ventas = Finanzas.objects.filter(tipo='Ingreso').annotate(
         mes=TruncMonth('fecha')
     ).values('mes').annotate(total=Sum('total')).order_by('mes')
+
+    if 'export' in request.GET:
+        # Exportar a CSV
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="reporte_ventas_por_mes.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['Mes', 'Total Ventas'])  # Encabezados
+
+        for venta in ventas:
+            writer.writerow([
+                venta['mes'].strftime('%Y-%m'),
+                venta['total']
+            ])
+
+        return response
+
     return render(request, 'reportes/reporte_ventas.html', {'ventas': ventas})
