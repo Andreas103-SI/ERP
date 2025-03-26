@@ -1,0 +1,150 @@
+@startuml
+' Diagrama Entidad-Relación para AutoGest S.L.
+
+' Configuración
+skinparam monochrome true
+skinparam shadowing false
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+' Entidades
+entity "Empleado" {
+  * id_empleado : Integer <<PK>>
+  --
+  nombre : Char(100)
+  apellido : Char(100)
+  dni : Char(20) <<unique>>
+  telefono : Char(15)
+  direccion : Char(255) <<nullable>>
+  email : Email <<unique>>
+  puesto : Char(50)
+  salario : Decimal(10,2)
+  fecha_contratacion : Date <<nullable>>
+}
+
+entity "Finanzas" {
+  * id_finanzas : Integer <<PK>>
+  --
+  tipo : Char(10) <<Ingreso/Egreso>>
+  descripcion : Char(100)
+  valor : Decimal(10,2)
+  iva : Decimal(10,2)
+  total : Decimal(10,2)
+  fecha : Date
+}
+
+entity "Gasto" {
+  * id : Integer <<PK>>
+  --
+  descripcion : Char(200)
+  monto : Decimal(10,2)
+  categoria : Char(20) <<Nómina/Servicios/Materiales/Otros>>
+  fecha : Date
+  fecha_creacion : DateTime
+  fecha_actualizacion : DateTime
+}
+
+entity "Vehiculo" {
+  * id_vehiculo : Integer <<PK>>
+  --
+  marca : Char(50)
+  modelo : Char(50)
+  anio : Integer
+  numero_bastidor : Char(50) <<unique>>
+  caracteristicas : Text
+  estado : Char(10) <<Nuevo/Usado>>
+  datos_propietario_anterior : Text <<nullable>>
+  precio : Decimal(10,2)
+  disponibilidad : Char(15) <<Disponible/Vendido>>
+}
+
+entity "Inventario" {
+  * id_inventario : Integer <<PK>>
+  --
+  tipo : Char(20) <<Vehículo/Recambio/Accesorio>>
+  nombre_producto : Char(100) <<nullable>>
+  cantidad : Integer
+  precio_unitario : Decimal(10,2)
+}
+
+entity "Producto" {
+  * id : Integer <<PK>>
+  --
+  nombre : Char(100)
+  descripcion : Text
+  precio : Decimal(10,2)
+  stock : Integer
+  stock_minimo : Integer
+  fecha_creacion : DateTime
+  fecha_actualizacion : DateTime
+}
+
+entity "Proveedor" {
+  * id_proveedor : Integer <<PK>>
+  --
+  nombre : Char(100)
+  contacto : Char(100)
+  producto : Char(100)
+  condiciones_pago : Text
+}
+
+entity "Pedido" {
+  * id_pedido : Integer <<PK>>
+  --
+  producto : Char(100)
+  cantidad : Integer
+  valor : Decimal(10,2)
+  estado : Char(15) <<Pendiente/Recibido/Cancelado>>
+  iva : Decimal(10,2)
+  total : Decimal(10,2)
+  fecha_pedido : Date
+}
+
+entity "Cliente" {
+  * id_cliente : Integer <<PK>>
+  --
+  nombre : Char(100)
+  apellido : Char(100)
+  dni_pasaporte : Char(20) <<unique>>
+  telefono : Char(15)
+  email : Email <<unique>>
+  direccion : Char(255) <<nullable>>
+}
+
+entity "Venta" {
+  * id_venta : Integer <<PK>>
+  --
+  presupuesto : Decimal(10,2)
+  contrato : Text
+  fecha : Date
+  valor_venta : Decimal(10,2)
+  iva : Decimal(10,2)
+  total : Decimal(10,2)
+}
+
+entity "VentaVehiculo" {
+  * venta_id : Integer <<FK>>
+  * vehiculo_id : Integer <<FK>>
+  --
+  <<unique_together: venta_id, vehiculo_id>>
+}
+
+' Relaciones
+Finanzas ||--o{ Venta
+Finanzas ||--o{ Pedido
+Finanzas ||--o{ Empleado
+Inventario ||--o{ Vehiculo
+Pedido ||--o{ Proveedor
+Venta ||--o{ Cliente
+Venta ||--o{ VentaVehiculo
+Vehiculo ||--o{ VentaVehiculo
+
+' Notas
+note right of Finanzas: Relaciones con Venta, Pedido y Empleado son opcionales
+note right of Inventario: Relación con Vehiculo es opcional
+note right of VentaVehiculo: Representa relación N:M entre Venta y Vehiculo
+
+@enduml
