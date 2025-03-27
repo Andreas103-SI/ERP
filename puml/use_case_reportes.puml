@@ -1,0 +1,84 @@
+@startuml
+' Diagrama de Casos de Uso para la aplicación Reportes (AutoGest S.L.)
+
+' Configuración de estilos
+skinparam dpi 90
+skinparam backgroundColor White
+skinparam monochrome false
+skinparam shadowing true
+skinparam actorStyle awesome
+skinparam packageBackgroundColor LightBlue
+skinparam packageBorderColor Blue
+skinparam usecaseBackgroundColor LightYellow
+skinparam usecaseBorderColor DarkOrange
+skinparam arrowColor DarkRed
+skinparam noteBackgroundColor LightGreen
+skinparam noteBorderColor Green
+
+' Actores
+actor "Usuario Autenticado" as User #Salmon
+
+' Sistema
+package "Aplicación Reportes" #LightBlue {
+
+  ' Casos de Uso
+  (Generar Reporte de Ingresos y Egresos) as ReporteIngresosEgresos #Yellow
+  (Generar Reporte de Ventas por Cliente) as ReporteVentasCliente #Yellow
+  (Generar Reporte de Pedidos por Proveedor) as ReportePedidosProveedor #Yellow
+  (Generar Reporte de Inventario) as ReporteInventario #Yellow
+  (Generar Reporte de Gastos por Categoría) as ReporteGastosCategoria #Yellow
+  (Generar Reporte de Empleados) as ReporteEmpleados #Yellow
+  (Generar Reporte de Ventas por Mes) as ReporteVentasMes #Yellow
+
+  ' Casos de Uso Extendidos
+  (Filtrar por Fechas) as FiltrarFechas #Cyan
+  (Filtrar por Cliente) as FiltrarCliente #Cyan
+  (Filtrar por Proveedor) as FiltrarProveedor #Cyan
+  (Filtrar por Estado) as FiltrarEstado #Cyan
+  (Filtrar por Tipo) as FiltrarTipo #Cyan
+  (Filtrar por Categoría) as FiltrarCategoria #Cyan
+  (Filtrar por Puesto) as FiltrarPuesto #Cyan
+  (Exportar a CSV) as ExportarCSV #Pink
+
+  ' Relaciones entre Casos de Uso
+  ReporteIngresosEgresos .> FiltrarFechas : <<extend>>
+  ReporteIngresosEgresos .> ExportarCSV : <<extend>>
+
+  ReporteVentasCliente .> FiltrarCliente : <<extend>>
+  ReporteVentasCliente .> FiltrarFechas : <<extend>>
+  ReporteVentasCliente .> ExportarCSV : <<extend>>
+
+  ReportePedidosProveedor .> FiltrarProveedor : <<extend>>
+  ReportePedidosProveedor .> FiltrarEstado : <<extend>>
+  ReportePedidosProveedor .> FiltrarFechas : <<extend>>
+  ReportePedidosProveedor .> ExportarCSV : <<extend>>
+
+  ReporteInventario .> FiltrarTipo : <<extend>>
+  ReporteInventario .> ExportarCSV : <<extend>>
+
+  ReporteGastosCategoria .> FiltrarCategoria : <<extend>>
+  ReporteGastosCategoria .> FiltrarFechas : <<extend>>
+  ReporteGastosCategoria .> ExportarCSV : <<extend>>
+
+  ReporteEmpleados .> FiltrarPuesto : <<extend>>
+  ReporteEmpleados .> ExportarCSV : <<extend>>
+
+  ReporteVentasMes .> ExportarCSV : <<extend>>
+}
+
+' Relaciones entre Actores y Casos de Uso
+User --> ReporteIngresosEgresos
+User --> ReporteVentasCliente
+User --> ReportePedidosProveedor
+User --> ReporteInventario
+User --> ReporteGastosCategoria
+User --> ReporteEmpleados
+User --> ReporteVentasMes
+
+' Notas
+note right of User #LightGreen
+  Representa un administrador o empleado
+  autenticado que genera reportes
+end note
+
+@enduml

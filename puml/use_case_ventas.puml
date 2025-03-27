@@ -1,0 +1,43 @@
+@startuml
+' Diagrama de Casos de Uso para la aplicación Ventas (AutoGest S.L.)
+
+' Configuración
+skinparam monochrome true
+skinparam shadowing false
+skinparam actorStyle awesome
+
+' Actores
+actor "Usuario Autenticado" as User
+
+' Sistema
+package "Aplicación Ventas" {
+
+  ' Casos de Uso - Clientes
+  (Listar Clientes) as ListarClientes
+  (Crear Cliente) as CrearCliente
+  (Actualizar Cliente) as ActualizarCliente
+  (Eliminar Cliente) as EliminarCliente
+  (Buscar Clientes) as BuscarClientes
+  (Gestionar Clientes vía API) as GestionarClientesAPI
+
+  ' Casos de Uso - Ventas y VentaVehiculo
+  (Gestionar Ventas vía API) as GestionarVentasAPI
+  (Gestionar Venta-Vehículo vía API) as GestionarVentaVehiculoAPI
+
+  ' Relaciones entre Casos de Uso
+  ListarClientes .> BuscarClientes : <<extend>>
+}
+
+' Relaciones entre Actores y Casos de Uso
+User --> ListarClientes
+User --> CrearCliente
+User --> ActualizarCliente
+User --> EliminarCliente
+User --> GestionarClientesAPI
+User --> GestionarVentasAPI
+User --> GestionarVentaVehiculoAPI
+
+' Notas
+note right of User: Representa un administrador o empleado\nautenticado que gestiona clientes y ventas
+
+@enduml

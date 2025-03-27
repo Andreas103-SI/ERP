@@ -1,0 +1,39 @@
+@startuml
+' Diagrama de Casos de Uso para la aplicación Empleados (AutoGest S.L.)
+
+' Configuración
+skinparam monochrome false
+skinparam shadowing false
+skinparam actorStyle awesome
+
+' Actores
+actor "Usuario Autenticado" as User
+
+' Sistema
+package "Aplicación Empleados" {
+
+  ' Casos de Uso
+  (Listar Empleados) as ListarEmpleados
+  (Crear Empleado) as CrearEmpleado
+  (Actualizar Empleado) as ActualizarEmpleado
+  (Eliminar Empleado) as EliminarEmpleado
+  (Buscar Empleados) as BuscarEmpleados
+  (Filtrar por Puesto) as FiltrarPuesto
+  (Gestionar Empleados vía API) as GestionarAPI
+
+  ' Relaciones entre Casos de Uso
+  ListarEmpleados .> BuscarEmpleados : <<extend>>
+  ListarEmpleados .> FiltrarPuesto : <<extend>>
+}
+
+' Relaciones entre Actores y Casos de Uso
+User --> ListarEmpleados
+User --> CrearEmpleado
+User --> ActualizarEmpleado
+User --> EliminarEmpleado
+User --> GestionarAPI
+
+' Notas
+note right of User: Representa un administrador o empleado\nautenticado que gestiona empleados
+
+@enduml

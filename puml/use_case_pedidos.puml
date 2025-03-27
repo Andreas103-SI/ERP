@@ -1,0 +1,39 @@
+@startuml
+' Diagrama de Casos de Uso para la aplicación Pedidos (AutoGest S.L.)
+
+' Configuración
+skinparam monochrome true
+skinparam shadowing false
+skinparam actorStyle awesome
+
+' Actores
+actor "Usuario Autenticado" as User
+
+' Sistema
+package "Aplicación Pedidos" {
+
+  ' Casos de Uso
+  (Listar Pedidos) as ListarPedidos
+  (Crear Pedido) as CrearPedido
+  (Actualizar Pedido) as ActualizarPedido
+  (Eliminar Pedido) as EliminarPedido
+  (Buscar Pedidos) as BuscarPedidos
+  (Filtrar por Estado) as FiltrarEstado
+  (Gestionar Pedidos vía API) as GestionarPedidosAPI
+
+  ' Relaciones entre Casos de Uso
+  ListarPedidos .> BuscarPedidos : <<extend>>
+  ListarPedidos .> FiltrarEstado : <<extend>>
+}
+
+' Relaciones entre Actores y Casos de Uso
+User --> ListarPedidos
+User --> CrearPedido
+User --> ActualizarPedido
+User --> EliminarPedido
+User --> GestionarPedidosAPI
+
+' Notas
+note right of User: Representa un administrador o empleado\nautenticado que gestiona pedidos
+
+@enduml

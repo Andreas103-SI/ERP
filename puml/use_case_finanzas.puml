@@ -1,0 +1,55 @@
+@startuml
+' Diagrama de Casos de Uso para la aplicación Finanzas (AutoGest S.L.)
+
+' Configuración
+skinparam monochrome false
+skinparam shadowing false
+skinparam actorStyle awesome
+
+' Actores
+actor "Usuario Autenticado" as User
+
+' Sistema
+package "Aplicación Finanzas" {
+
+  ' Casos de Uso - Transacciones Financieras
+  (Listar Transacciones) as ListarFinanzas
+  (Crear Transacción) as CrearFinanzas
+  (Actualizar Transacción) as ActualizarFinanzas
+  (Eliminar Transacción) as EliminarFinanzas
+  (Filtrar por Tipo) as FiltrarTipo
+  (Filtrar por Fecha) as FiltrarFecha
+  (Gestionar Transacciones vía API) as GestionarFinanzasAPI
+
+  ' Casos de Uso - Gastos
+  (Listar Gastos) as ListarGastos
+  (Crear Gasto) as CrearGasto
+  (Actualizar Gasto) as ActualizarGasto
+  (Eliminar Gasto) as EliminarGasto
+  (Buscar Gastos) as BuscarGastos
+  (Filtrar por Categoría) as FiltrarCategoria
+  (Filtrar Gastos por Fecha) as FiltrarGastosFecha
+
+  ' Relaciones entre Casos de Uso
+  ListarFinanzas .> FiltrarTipo : <<extend>>
+  ListarFinanzas .> FiltrarFecha : <<extend>>
+  ListarGastos .> BuscarGastos : <<extend>>
+  ListarGastos .> FiltrarCategoria : <<extend>>
+  ListarGastos .> FiltrarGastosFecha : <<extend>>
+}
+
+' Relaciones entre Actores y Casos de Uso
+User --> ListarFinanzas
+User --> CrearFinanzas
+User --> ActualizarFinanzas
+User --> EliminarFinanzas
+User --> GestionarFinanzasAPI
+User --> ListarGastos
+User --> CrearGasto
+User --> ActualizarGasto
+User --> EliminarGasto
+
+' Notas
+note right of User: Representa un administrador o empleado\nautenticado que gestiona finanzas y gastos
+
+@enduml

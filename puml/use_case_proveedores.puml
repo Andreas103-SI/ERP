@@ -1,0 +1,37 @@
+@startuml
+' Diagrama de Casos de Uso para la aplicación Proveedores (AutoGest S.L.)
+
+' Configuración
+skinparam monochrome true
+skinparam shadowing false
+skinparam actorStyle awesome
+
+' Actores
+actor "Usuario Autenticado" as User
+
+' Sistema
+package "Aplicación Proveedores" {
+
+  ' Casos de Uso
+  (Listar Proveedores) as ListarProveedores
+  (Crear Proveedor) as CrearProveedor
+  (Actualizar Proveedor) as ActualizarProveedor
+  (Eliminar Proveedor) as EliminarProveedor
+  (Buscar Proveedores) as BuscarProveedores
+  (Gestionar Proveedores vía API) as GestionarProveedoresAPI
+
+  ' Relaciones entre Casos de Uso
+  ListarProveedores .> BuscarProveedores : <<extend>>
+}
+
+' Relaciones entre Actores y Casos de Uso
+User --> ListarProveedores
+User --> CrearProveedor
+User --> ActualizarProveedor
+User --> EliminarProveedor
+User --> GestionarProveedoresAPI
+
+' Notas
+note right of User: Representa un administrador o empleado\nautenticado que gestiona proveedores
+
+@enduml

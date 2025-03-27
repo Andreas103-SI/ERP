@@ -1,0 +1,125 @@
+@startuml
+' Diagrama de Objetos para AutoGest S.L.
+
+' Configuración
+skinparam monochrome false
+skinparam shadowing false
+
+' Objetos
+object "empleado1: Empleado" as empleado1 {
+  id_empleado = 1
+  nombre = "Juan"
+  apellido = "Pérez"
+  dni = "12345678"
+  telefono = "555-1234"
+  email = "juan.perez@autogest.com"
+  puesto = "Gerente"
+  salario = 2500.00
+  fecha_contratacion = 2023-01-15
+}
+
+object "finanzas1: Finanzas" as finanzas1 {
+  id_finanzas = 1
+  tipo = "Ingreso"
+  descripcion = "Venta de vehículo"
+  valor = 20000.00
+  iva = 3200.00
+  total = 23200.00
+  fecha = 2025-03-27
+}
+
+object "gasto1: Gasto" as gasto1 {
+  id = 1
+  descripcion = "Pago de nómina"
+  monto = 5000.00
+  categoria = "nomina"
+  fecha = 2025-03-01
+  fecha_creacion = 2025-03-01 10:00:00
+  fecha_actualizacion = 2025-03-01 10:00:00
+}
+
+object "vehiculo1: Vehiculo" as vehiculo1 {
+  id_vehiculo = 1
+  marca = "Toyota"
+  modelo = "Corolla"
+  anio = 2020
+  numero_bastidor = "VIN123456789"
+  caracteristicas = "Sedán, 4 puertas, automático"
+  estado = "Usado"
+  precio = 20000.00
+  disponibilidad = "Vendido"
+}
+
+object "inventario1: Inventario" as inventario1 {
+  id_inventario = 1
+  tipo = "Vehículo"
+  cantidad = 1
+  precio_unitario = 20000.00
+}
+
+object "producto1: Producto" as producto1 {
+  id = 1
+  nombre = "Aceite de Motor"
+  descripcion = "Aceite sintético 5W-30"
+  precio = 25.00
+  stock = 5
+  stock_minimo = 10
+  fecha_creacion = 2024-01-10 09:00:00
+  fecha_actualizacion = 2025-03-27 14:00:00
+}
+
+object "proveedor1: Proveedor" as proveedor1 {
+  id_proveedor = 1
+  nombre = "AutoPartes S.A."
+  contacto = "Carlos Gómez"
+  producto = "Baterías"
+  condiciones_pago = "30 días"
+}
+
+object "pedido1: Pedido" as pedido1 {
+  id_pedido = 1
+  producto = "Baterías"
+  cantidad = 10
+  valor = 500.00
+  estado = "Pendiente"
+  iva = 80.00
+  total = 580.00
+  fecha_pedido = 2025-03-20
+}
+
+object "cliente1: Cliente" as cliente1 {
+  id_cliente = 1
+  nombre = "María"
+  apellido = "López"
+  dni_pasaporte = "87654321"
+  telefono = "555-5678"
+  email = "maria.lopez@gmail.com"
+}
+
+object "venta1: Venta" as venta1 {
+  id_venta = 1
+  presupuesto = 20000.00
+  contrato = "Contrato de venta estándar"
+  fecha = 2025-03-27
+  valor_venta = 20000.00
+  iva = 3200.00
+  total = 23200.00
+}
+
+object "ventaVehiculo1: VentaVehiculo" as ventaVehiculo1
+
+' Relaciones
+finanzas1 --> venta1 : venta
+finanzas1 --> empleado1 : empleado
+inventario1 --> vehiculo1 : vehiculo
+pedido1 --> proveedor1 : proveedor
+venta1 --> cliente1 : cliente
+ventaVehiculo1 --> venta1
+ventaVehiculo1 --> vehiculo1
+
+' Notas
+note right of finanzas1: Representa una transacción de ingreso por la venta de un vehículo
+note right of ventaVehiculo1: Conecta la venta con el vehículo vendido
+note right of producto1: Stock bajo (5 < 10)
+
+@enduml

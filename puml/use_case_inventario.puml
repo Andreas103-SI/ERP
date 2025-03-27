@@ -1,0 +1,37 @@
+@startuml
+' Diagrama de Casos de Uso para la aplicación Inventario (AutoGest S.L.)
+
+' Configuración
+skinparam monochrome true
+skinparam shadowing false
+skinparam actorStyle awesome
+
+' Actores
+actor "Usuario Autenticado" as User
+
+' Sistema
+package "Aplicación Inventario" {
+
+  ' Casos de Uso - Vehículos
+  (Listar Vehículos) as ListarVehiculos
+  (Crear Vehículo) as CrearVehiculo
+  (Actualizar Vehículo) as ActualizarVehiculo
+  (Eliminar Vehículo) as EliminarVehiculo
+  (Buscar Vehículos) as BuscarVehiculos
+  (Gestionar Vehículos vía API) as GestionarVehiculosAPI
+
+  ' Relaciones entre Casos de Uso
+  ListarVehiculos .> BuscarVehiculos : <<extend>>
+}
+
+' Relaciones entre Actores y Casos de Uso
+User --> ListarVehiculos
+User --> CrearVehiculo
+User --> ActualizarVehiculo
+User --> EliminarVehiculo
+User --> GestionarVehiculosAPI
+
+' Notas
+note right of User: Representa un administrador o empleado\nautenticado que gestiona vehículos en el inventario
+
+@enduml
