@@ -72,7 +72,7 @@ ERP/
 ├── reportes/          # Módulo de generación de reportes
 ├── static/            # Archivos estáticos (CSS, JS, imágenes)
 ├── templates/         # Plantillas HTML
-├── out/              # Archivos de salida y documentación
+├── out/              # Archivos de salida (diagramas PNG y documentación)
 ├── puml/             # Diagramas PlantUML
 ├── requirements.txt  # Dependencias del proyecto
 └── manage.py         # Script de administración de Django
@@ -116,6 +116,55 @@ ERP/
 - `/api/reportes/ventas-mes/`: Reporte de ventas por mes
 - `/api/reportes/inventario-disponible/`: Estado del inventario
 - `/api/reportes/gastos-nomina/`: Reporte de gastos por nómina
+- `/api/reportes/ventas-mes/`: Reporte de ventas por mes.
+- `/api/reportes/inventario-disponible/`: Estado del inventario.
+- `/api/reportes/gastos-nomina/`: Reporte de gastos por nómina.
+### Ventas
+- `/api/ventas/clientes/`: Lista de clientes (GET) o creación de un cliente (POST).
+- `/api/ventas/ventas/`: Lista de ventas (GET) o creación de una venta (POST).
+### Inventario
+- `/api/inventario/vehiculos/`: Lista de vehículos (GET) o creación de un vehículo (POST).
+- (Consulta la documentación completa de las API en el código o en un futuro archivo de documentación de la API.)     
+
+
+## Uso del Sistema
+1. Acceso al Panel de Administración:
+- Una vez que el servidor esté corriendo (python manage.py runserver), accede a [http://localhost:8000/admin/] e inicia sesión con las credenciales del superusuario.
+- Desde el panel de administración, puedes gestionar empleados, ventas, pedidos, finanzas, inventario y reportes.   
+
+2. Uso de las API:
+- Las API REST están disponibles para sistemas externos. Por ejemplo, para obtener un reporte de ventas por mes, haz una solicitud GET a [http://localhost:8000/api/reportes/ventas-mes/].
+- Asegúrate de incluir un token de autenticación en las solicitudes, ya que las API requieren que el usuario esté autenticado.
+
+
+## Diagramas UML
+El proyecto incluye diagramas UML que describen el diseño y la arquitectura del sistema. Estos diagramas fueron generados con PlantUML y están disponibles en las siguientes carpetas:
+
+- Archivos fuente: puml/ (archivos .puml).
+- Diagramas generados: out/ (archivos PNG).
+
+# Despliegue en Producción
+
+Para desplegar el sistema en un entorno de producción, sigue estos pasos básicos:
+
+1.  **Configura un servidor web como Gunicorn y un proxy inverso como Nginx:**
+
+    ```bash
+    pip install gunicorn
+    gunicorn --bind 0.0.0.0:8000 erp_config.wsgi
+    ```
+
+    * Configura Nginx como proxy inverso (consulta la configuración en el Diagrama de Despliegue).
+
+2.  **Asegúrate de configurar las variables de entorno en `erp_config/settings.py`:**
+
+    * Por ejemplo, `DEBUG=False`, credenciales de la base de datos.
+
+3.  **Usa un servicio de base de datos gestionado (como PostgreSQL en AWS RDS) para mayor escalabilidad.**
+
+4.  **Configura HTTPS con un certificado SSL (por ejemplo, usando Let's Encrypt).**
+
+Para más detalles, consulta el [Diagrama de Despliegue].
 
 ## Contribución
 
@@ -129,8 +178,10 @@ ERP/
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
 
-## Contacto
+# Contacto
 
-[Tu Nombre] - [andreasierra103@email.com]
+Andrea Sierra - [andreasierra103@email.com](mailto:andreasierra103@email.com)
 
-URL del Proyecto: [https://github.com/Andreas103-SI](https://github.com/Andreas103-SI/ERP)
+LinkedIn: [Andrea Sierra](https://www.linkedin.com/in/tu-perfil-de-linkedin)  (Añade tu enlace de LinkedIn)
+
+URL del Proyecto: [https://github.com/Andreas103-SI/ERP](https://github.com/Andreas103-SI/ERP)
