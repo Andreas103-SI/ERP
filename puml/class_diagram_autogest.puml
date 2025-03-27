@@ -1,0 +1,175 @@
+@startuml
+' Diagrama de Clases para AutoGest S.L.
+
+' Configuración
+skinparam monochrome true
+skinparam shadowing false
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+' Clases
+class Empleado {
+  +id_empleado: Integer <<PK>>
+  +nombre: Char(100)
+  +apellido: Char(100)
+  +dni: Char(20) <<unique>>
+  +telefono: Char(15)
+  +direccion: Char(255) <<nullable>>
+  +email: Email <<unique>>
+  +puesto: Char(50)
+  +salario: Decimal(10,2)
+  +fecha_contratacion: Date <<nullable>>
+  --
+  +__str__(): String
+  +save()
+}
+
+class Finanzas {
+  +id_finanzas: Integer <<PK>>
+  +tipo: Char(10) <<Ingreso/Egreso>>
+  +descripcion: Char(100)
+  +valor: Decimal(10,2)
+  +iva: Decimal(10,2)
+  +total: Decimal(10,2)
+  +fecha: Date
+  --
+  +__str__(): String
+}
+
+class Gasto {
+  +id: Integer <<PK>>
+  +descripcion: Char(200)
+  +monto: Decimal(10,2)
+  +categoria: Char(20) <<Nómina/Servicios/Materiales/Otros>>
+  +fecha: Date
+  +fecha_creacion: DateTime
+  +fecha_actualizacion: DateTime
+  --
+  +__str__(): String
+}
+
+class Vehiculo {
+  +id_vehiculo: Integer <<PK>>
+  +marca: Char(50)
+  +modelo: Char(50)
+  +anio: Integer
+  +numero_bastidor: Char(50) <<unique>>
+  +caracteristicas: Text
+  +estado: Char(10) <<Nuevo/Usado>>
+  +datos_propietario_anterior: Text <<nullable>>
+  +precio: Decimal(10,2)
+  +disponibilidad: Char(15) <<Disponible/Vendido>>
+  --
+  +__str__(): String
+}
+
+class Inventario {
+  +id_inventario: Integer <<PK>>
+  +tipo: Char(20) <<Vehículo/Recambio/Accesorio>>
+  +nombre_producto: Char(100) <<nullable>>
+  +cantidad: Integer
+  +precio_unitario: Decimal(10,2)
+  --
+  +__str__(): String
+}
+
+class Producto {
+  +id: Integer <<PK>>
+  +nombre: Char(100)
+  +descripcion: Text
+  +precio: Decimal(10,2)
+  +stock: Integer
+  +stock_minimo: Integer
+  +fecha_creacion: DateTime
+  +fecha_actualizacion: DateTime
+  --
+  +__str__(): String
+}
+
+class Proveedor {
+  +id_proveedor: Integer <<PK>>
+  +nombre: Char(100)
+  +contacto: Char(100)
+  +producto: Char(100)
+  +condiciones_pago: Text
+  --
+  +__str__(): String
+}
+
+class ProveedorGeneral {
+  +id: Integer <<PK>>
+  +nombre: Char(100)
+  +contacto: Char(100)
+  +email: Email <<unique>>
+  +telefono: Char(15)
+  +direccion: Text
+  --
+  +__str__(): String
+}
+
+class Pedido {
+  +id_pedido: Integer <<PK>>
+  +producto: Char(100)
+  +cantidad: Integer
+  +valor: Decimal(10,2)
+  +estado: Char(15) <<Pendiente/Recibido/Cancelado>>
+  +iva: Decimal(10,2)
+  +total: Decimal(10,2)
+  +fecha_pedido: Date
+  --
+  +__str__(): String
+}
+
+class Cliente {
+  +id_cliente: Integer <<PK>>
+  +nombre: Char(100)
+  +apellido: Char(100)
+  +dni_pasaporte: Char(20) <<unique>>
+  +telefono: Char(15)
+  +email: Email <<unique>>
+  +direccion: Char(255) <<nullable>>
+  --
+  +__str__(): String
+}
+
+class Venta {
+  +id_venta: Integer <<PK>>
+  +presupuesto: Decimal(10,2)
+  +contrato: Text
+  +fecha: Date
+  +valor_venta: Decimal(10,2)
+  +iva: Decimal(10,2)
+  +total: Decimal(10,2)
+  --
+  +__str__(): String
+}
+
+class VentaVehiculo {
+  +venta_id: Integer <<FK>>
+  +vehiculo_id: Integer <<FK>>
+  --
+  +__str__(): String
+  <<unique_together: venta_id, vehiculo_id>>
+}
+
+' Relaciones
+Finanzas "1" -- "0..*" Venta : venta
+Finanzas "1" -- "0..*" Pedido : pedido
+Finanzas "1" -- "0..*" Empleado : empleado
+Inventario "1" -- "0..*" Vehiculo : vehiculo
+Pedido "1" -- "1" Proveedor : proveedor
+Venta "1" -- "1" Cliente : cliente
+Venta "1" -- "0..*" VentaVehiculo
+Vehiculo "1" -- "0..*" VentaVehiculo
+
+' Notas
+note right of Finanzas: Relaciones con Venta, Pedido y Empleado son opcionales
+note right of Inventario: Relación con Vehiculo es opcional
+note right of VentaVehiculo: Representa relación N:M entre Venta y Vehiculo
+note right of Proveedor: Proveedor de pedidos/models.py
+note right of ProveedorGeneral: Proveedor de proveedores/models.py
+
+@enduml

@@ -22,7 +22,7 @@ Este es un sistema ERP (Enterprise Resource Planning) desarrollado con Django pa
 
 1. Clonar el repositorio:
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone [https://github.com/Andreas103-SI/ERP.git]
 cd ERP
 ```
 
@@ -131,6 +131,6 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ## Contacto
 
-[Tu Nombre] - [tu@email.com]
+[Tu Nombre] - [andreasierra103@email.com]
 
-URL del Proyecto: [https://github.com/tuusuario/ERP](https://github.com/tuusuario/ERP)
+URL del Proyecto: [https://github.com/Andreas103-SI](https://github.com/Andreas103-SI/ERP)
