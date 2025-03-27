@@ -1,0 +1,34 @@
+@startuml
+' Diagrama de Secuencia para Generar Reporte de Ingresos y Egresos (Aplicación Reportes)
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam actorBorderColor LightBlue
+skinparam participantBorderColor LightBlue
+skinparam participantBackgroundColor LightBlue
+skinparam arrowColor LightBlue
+skinparam sequenceLifeLineBorderColor LightBlue
+
+' Participantes
+actor "Usuario Autenticado" as User
+participant "IngresosEgresosListView" as View
+participant "Finanzas" as Model
+participant "Database" as DB
+
+' Flujo
+User -> View: GET /reporte_ingresos_egresos/?export=csv
+activate View
+View -> Model: Consultar transacciones financieras
+activate Model
+Model -> DB: Obtener datos (anotados por mes y tipo)
+activate DB
+DB -> Model: Datos de transacciones
+deactivate DB
+Model -> View: Datos procesados
+deactivate Model
+
+View -> View: Generar archivo CSV
+View -> User: Descargar reporte_ingresos_egresos.csv
+deactivate View
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+' Diagrama de Secuencia para Actualizar Vehículo (Aplicación Inventario)
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam actorBorderColor LightBlue
+skinparam participantBorderColor LightBlue
+skinparam participantBackgroundColor LightBlue
+skinparam arrowColor LightBlue
+skinparam sequenceLifeLineBorderColor LightBlue
+
+' Participantes
+actor "Usuario Autenticado" as User
+participant "VehiculoUpdateView" as View
+participant "VehiculoForm" as Form
+participant "Vehiculo" as Model
+participant "Database" as DB
+
+' Flujo
+User -> View: POST /actualizar_vehiculo/1/ (datos actualizados)
+activate View
+View -> Form: Crear formulario con datos
+activate Form
+Form -> Form: Validar datos
+Form -> View: Datos válidos
+deactivate Form
+
+View -> Model: Actualizar vehículo
+activate Model
+Model -> DB: Actualizar datos del vehículo
+activate DB
+DB -> Model: Confirmación
+deactivate DB
+Model -> View: Vehículo actualizado
+deactivate Model
+
+View -> User: Mensaje: "Vehículo actualizado exitosamente"
+View -> User: Redirigir a /vehiculo_list/
+deactivate View
+
+@enduml

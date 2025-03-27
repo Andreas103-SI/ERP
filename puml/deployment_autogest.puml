@@ -1,0 +1,57 @@
+@startuml
+' Diagrama de Despliegue para AutoGest S.L.
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam node {
+  BorderColor LightBlue
+  BackgroundColor LightBlue
+  FontColor Black
+}
+skinparam artifact {
+  BorderColor LightBlue
+  BackgroundColor LightBlue
+  FontColor Black
+}
+skinparam arrowColor LightBlue
+
+' Nodos Físicos
+node "Cliente (Usuario)" as Client {
+  [Navegador Web] #..# [Vistas HTML (*.html)]
+}
+
+node "Cliente API (Sistema Externo)" as APIClient {
+  [Consumidor API] #..# [API REST (*.json)]
+}
+
+node "Servidor Web" as WebServer {
+  package "Aplicación Django" {
+    [Gunicorn] #..# [Nginx]
+    [Nginx] #..# [Apps Django]
+    [Apps Django] #..# [Autenticación]
+    [Apps Django] #..# [empleados]
+    [Apps Django] #..# [finanzas]
+    [Apps Django] #..# [inventario]
+    [Apps Django] #..# [pedidos]
+    [Apps Django] #..# [proveedores]
+    [Apps Django] #..# [ventas]
+    [Apps Django] #..# [reportes]
+  }
+}
+
+node "Servidor de Base de Datos" as DBServer {
+  [PostgreSQL] #..# [Base de Datos (*.db)]
+}
+
+' Relaciones
+Client -down-> WebServer : HTTP/HTTPS
+APIClient -down-> WebServer : HTTP/HTTPS
+WebServer -down-> DBServer : JDBC/ODBC
+
+' Notas
+note right of Client: Dispositivos de usuarios\nautenticados (PC, móvil)
+note right of APIClient: Sistemas externos que\nconsumen la API REST
+note right of WebServer: Servidor que ejecuta\nla aplicación Django
+note right of DBServer: Almacena datos de\ntodas las aplicaciones
+
+@enduml

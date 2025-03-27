@@ -1,0 +1,35 @@
+@startuml
+' Diagrama de Colaboración (Comunicación) para Registrar una Venta de un Vehículo (AutoGest S.L.)
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam actorBorderColor LightBlue
+skinparam participantBorderColor LightBlue
+skinparam participantBackgroundColor LightBlue
+skinparam arrowColor LightBlue
+skinparam sequenceLifeLineBorderColor LightBlue
+
+' Participantes (Objetos)
+actor "Usuario Autenticado" as User
+participant "cliente1:Cliente" as cliente1
+participant "venta1:Venta" as venta1
+participant "ventaVehiculo1:VentaVehiculo" as ventaVehiculo1
+participant "vehiculo1:Vehiculo" as vehiculo1
+participant "finanzas1:Finanzas" as finanzas1
+participant "empleado1:Empleado" as empleado1
+
+' Mensajes (numerados para simular un diagrama de colaboración)
+User -> venta1 : 1: Crear venta
+venta1 -> cliente1 : 2: Asociar cliente
+venta1 -> ventaVehiculo1 : 3: Asociar vehículo
+ventaVehiculo1 -> vehiculo1 : 4: Actualizar disponibilidad a "Vendido"
+venta1 -> finanzas1 : 5: Registrar transacción financiera
+finanzas1 -> empleado1 : 6: Asociar empleado
+venta1 -> User : 7: Confirmación: "Venta registrada exitosamente"
+
+' Notas
+note right of venta1: Representa una venta específica\n(id_venta=1, total=23200.00)
+note right of vehiculo1: Vehículo vendido\n(marca="Toyota", modelo="Corolla")
+note right of finanzas1: Transacción de ingreso\n(tipo="Ingreso", valor=20000.00)
+
+@enduml

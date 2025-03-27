@@ -1,0 +1,76 @@
+@startuml
+' Diagrama de Componentes para AutoGest S.L.
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam component {
+  BorderColor LightBlue
+  BackgroundColor LightBlue
+  FontColor Black
+  ArrowColor LightBlue
+}
+
+' Componentes (Aplicaciones Django)
+package "AutoGest S.L." {
+
+  ' Componentes Principales (Aplicaciones)
+  [Empleados] #..# [Autenticación]
+  [Finanzas] #..# [Autenticación]
+  [Inventario] #..# [Autenticación]
+  [Pedidos] #..# [Autenticación]
+  [Proveedores] #..# [Autenticación]
+  [Ventas] #..# [Autenticación]
+  [Reportes] #..# [Autenticación]
+
+  ' Dependencias entre Aplicaciones
+  [Finanzas] --> [Ventas] : Usa (ingresos por ventas)
+  [Finanzas] --> [Pedidos] : Usa (egresos por pedidos)
+  [Finanzas] --> [Empleados] : Usa (asociar transacciones)
+  [Ventas] --> [Inventario] : Usa (asociar vehículos)
+  [Pedidos] --> [Proveedores] : Usa (asociar proveedores)
+  [Reportes] --> [Finanzas] : Usa (reportes de ingresos/egresos)
+  [Reportes] --> [Ventas] : Usa (reportes de ventas)
+  [Reportes] --> [Pedidos] : Usa (reportes de pedidos)
+  [Reportes] --> [Inventario] : Usa (reportes de inventario)
+  [Reportes] --> [Empleados] : Usa (reportes de empleados)
+
+  ' Interfaces Proporcionadas
+  [Empleados] #-[ Vistas Web (HTML) ]
+  [Empleados] #-[ API REST (JSON) ]
+  [Finanzas] #-[ Vistas Web (HTML) ]
+  [Finanzas] #-[ API REST (JSON) ]
+  [Inventario] #-[ Vistas Web (HTML) ]
+  [Inventario] #-[ API REST (JSON) ]
+  [Pedidos] #-[ Vistas Web (HTML) ]
+  [Pedidos] #-[ API REST (JSON) ]
+  [Proveedores] #-[ Vistas Web (HTML) ]
+  [Proveedores] #-[ API REST (JSON) ]
+  [Ventas] #-[ Vistas Web (HTML) ]
+  [Ventas] #-[ API REST (JSON) ]
+  [Reportes] #-[ Vistas Web (HTML) ]
+  [Reportes] #-[ API REST (JSON) ]
+}
+
+' Componentes Externos
+[Base de Datos] #..# [Empleados]
+[Base de Datos] #..# [Finanzas]
+[Base de Datos] #..# [Inventario]
+[Base de Datos] #..# [Pedidos]
+[Base de Datos] #..# [Proveedores]
+[Base de Datos] #..# [Ventas]
+[Base de Datos] #..# [Reportes]
+
+' Actores
+actor "Usuario Autenticado" as User
+actor "Sistema Externo" as ExternalSystem
+
+' Relaciones con Actores
+User --> [Vistas Web (HTML)] : Accede
+ExternalSystem --> [API REST (JSON)] : Consume
+
+' Notas
+note right of [Base de Datos]: Almacena datos de todas\nlas aplicaciones (Django ORM)
+note right of [Autenticación]: Gestiona acceso de usuarios\n(LoginRequiredMixin, IsAuthenticated)
+note bottom of [Reportes]: Genera reportes basados en datos\nde todas las aplicaciones
+
+@enduml

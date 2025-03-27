@@ -1,0 +1,41 @@
+@startuml
+' Diagrama de Secuencia para Crear Cliente (Aplicación Ventas)
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam actorBorderColor LightBlue
+skinparam participantBorderColor LightBlue
+skinparam participantBackgroundColor LightBlue
+skinparam arrowColor LightBlue
+skinparam sequenceLifeLineBorderColor LightBlue
+
+' Participantes
+actor "Usuario Autenticado" as User
+participant "ClienteCreateView" as View
+participant "ClienteForm" as Form
+participant "Cliente" as Model
+participant "Database" as DB
+
+' Flujo
+User -> View: POST /crear_cliente/ (datos del cliente)
+activate View
+View -> Form: Crear formulario con datos
+activate Form
+Form -> Form: Validar datos
+Form -> View: Datos válidos
+deactivate Form
+
+View -> Model: Crear cliente
+activate Model
+Model -> DB: Guardar cliente
+activate DB
+DB -> Model: Confirmación
+deactivate DB
+Model -> View: Cliente creado
+deactivate Model
+
+View -> User: Mensaje: "Cliente creado exitosamente"
+View -> User: Redirigir a /cliente_list/
+deactivate View
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+' Diagrama de Secuencia para Crear Gasto (Aplicación Finanzas)
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam actorBorderColor LightBlue
+skinparam participantBorderColor LightBlue
+skinparam participantBackgroundColor LightBlue
+skinparam arrowColor LightBlue
+skinparam sequenceLifeLineBorderColor LightBlue
+
+' Participantes
+actor "Usuario Autenticado" as User
+participant "GastoCreateView" as View
+participant "GastoForm" as Form
+participant "Gasto" as Model
+participant "Database" as DB
+
+' Flujo
+User -> View: POST /crear_gasto/ (datos del gasto)
+activate View
+View -> Form: Crear formulario con datos
+activate Form
+Form -> Form: Validar datos
+Form -> View: Datos válidos
+deactivate Form
+
+View -> Model: Crear gasto
+activate Model
+Model -> DB: Guardar gasto
+activate DB
+DB -> Model: Confirmación
+deactivate DB
+Model -> View: Gasto creado
+deactivate Model
+
+View -> User: Mensaje: "Gasto creado exitosamente"
+View -> User: Redirigir a /gasto_list/
+deactivate View
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+' Diagrama de Estados para el Ciclo de Vida de un Pedido (AutoGest S.L.)
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam state {
+  BorderColor LightBlue
+  BackgroundColor LightBlue
+  FontColor Black
+  ArrowColor LightBlue
+}
+
+' Estados
+[*] --> Pendiente : Crear Pedido\n(PedidoCreateView)
+
+state Pendiente {
+  note right: Pedido creado y asociado\na un proveedor (Proveedores)
+}
+
+Pendiente --> Recibido : Recibir Pedido\n(PedidoUpdateView)
+Pendiente --> Cancelado : Cancelar Pedido\n(PedidoUpdateView)
+
+state Recibido {
+  note right: - Actualizar Inventario\n(Inventario/Producto)\n- Registrar Egreso\n(Finanzas)
+}
+
+state Cancelado {
+  note right: Pedido cancelado,\nno se actualiza inventario
+}
+
+Recibido --> [*] : Finalizar
+Cancelado --> [*] : Finalizar
+
+' Notas
+note bottom of Pendiente: Estado inicial del pedido\ndespués de ser creado
+note bottom of Recibido: Estado final del pedido\ncuando se recibe
+note bottom of Cancelado: Estado final del pedido\ncuando se cancela
+
+@enduml

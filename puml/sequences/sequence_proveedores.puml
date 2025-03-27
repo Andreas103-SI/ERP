@@ -1,0 +1,33 @@
+@startuml
+' Diagrama de Secuencia para Listar Proveedores (Aplicación Proveedores)
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam actorBorderColor LightBlue
+skinparam participantBorderColor LightBlue
+skinparam participantBackgroundColor LightBlue
+skinparam arrowColor LightBlue
+skinparam sequenceLifeLineBorderColor LightBlue
+
+' Participantes
+actor "Usuario Autenticado" as User
+participant "ProveedorListView" as View
+participant "Proveedor" as Model
+participant "Database" as DB
+
+' Flujo
+User -> View: GET /proveedor_list/
+activate View
+View -> Model: Consultar proveedores
+activate Model
+Model -> DB: Obtener lista de proveedores
+activate DB
+DB -> Model: Lista de proveedores
+deactivate DB
+Model -> View: Lista de proveedores
+deactivate Model
+
+View -> User: Renderizar lista de proveedores
+deactivate View
+
+@enduml

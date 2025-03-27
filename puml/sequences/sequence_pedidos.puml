@@ -1,0 +1,34 @@
+@startuml
+' Diagrama de Secuencia para Eliminar Pedido (Aplicación Pedidos)
+
+' Configuración de Estilo con Tono Azul
+skinparam shadowing false
+skinparam actorBorderColor LightBlue
+skinparam participantBorderColor LightBlue
+skinparam participantBackgroundColor LightBlue
+skinparam arrowColor LightBlue
+skinparam sequenceLifeLineBorderColor LightBlue
+
+' Participantes
+actor "Usuario Autenticado" as User
+participant "PedidoDeleteView" as View
+participant "Pedido" as Model
+participant "Database" as DB
+
+' Flujo
+User -> View: POST /eliminar_pedido/1/
+activate View
+View -> Model: Eliminar pedido
+activate Model
+Model -> DB: Eliminar datos del pedido
+activate DB
+DB -> Model: Confirmación
+deactivate DB
+Model -> View: Pedido eliminado
+deactivate Model
+
+View -> User: Mensaje: "Pedido eliminado exitosamente"
+View -> User: Redirigir a /pedido_list/
+deactivate View
+
+@enduml
